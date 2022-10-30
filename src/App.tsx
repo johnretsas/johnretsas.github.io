@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Route,
   Switch,
 } from "react-router-dom";
@@ -21,7 +21,7 @@ const App = () => {
       <div>
         <Navbar />
         <Switch>
-          <Route path="/blog/:blogId">
+          <Route  path="/blog/:blogId">
             <Blog />
           </Route>
           <Route path="/blog">
