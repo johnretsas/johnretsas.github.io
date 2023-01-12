@@ -19,8 +19,11 @@ const Blog = () => {
         return (
             <div className={styles.container}>
                 <div>
-                    <div>
+                    {/* <div>
                         <Link className={styles.blogLinks} to="/blog/going-to-mars">Going to Mars is a bad idea.</Link>
+                    </div> */}
+                    <div>
+                        Posts:
                     </div>
                     <div>
                         <Link className={styles.blogLinks} to="/blog/another-blog-post">Another blog post</Link>
