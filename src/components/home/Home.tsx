@@ -10,7 +10,7 @@ const Home = () => {
     // }
     return <div className={styles.container}>
         <p>Hey, I'm John :)</p>
-        <p>I'm a <em>senior full stack engineer</em> focused mainly on JS/TS stacks <SiTypescript size={"30px"} style={{ marginLeft: 10 }} /></p>
+        <p>I'm a <em style={{paddingBlock: 10, textDecoration: "underline"}}>senior full stack engineer</em> focused mainly on JS/TS stacks <SiTypescript size={"30px"} style={{ marginLeft: 10 }} /></p>
         <p>Other stuff I've dabbled with is:</p>
         <p>
             Kubernetes <SiKubernetes size={"20px"} style={{ marginLeft: 10, marginRight: 10 }} />,

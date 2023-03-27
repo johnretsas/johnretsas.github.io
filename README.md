@@ -1,3 +1,9 @@
+# How to deploy changes
+
+run
+### `yarn build` 
+Check the /build folder and move to the root whatever is needed.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
