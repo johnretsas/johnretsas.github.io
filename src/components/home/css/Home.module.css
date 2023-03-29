@@ -1,6 +1,6 @@
 .container {
     width: calc(100% - 20px);
-    height: 70vh;
+    height: 90vh;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -8,10 +8,8 @@
     font-size: 24px;
     width: 80%;
     margin: auto;
-    text-align: justify;
     padding-left: 10px;
     padding-right: 10px;
-    text-align: center;
 }
 
 .glowingCircle {

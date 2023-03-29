@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import GoingToMars from './pages/GoingToMars'
 import styles from './css/Blog.module.css'
-import { TbArrowUp } from 'react-icons/tb'
 import GoUp from './GoUp'
+import BlogCard from './BlogCard'
 
 const Blog = () => {
     const [Y, setY] = useState(10);
@@ -19,15 +19,10 @@ const Blog = () => {
         return (
             <div className={styles.container}>
                 <div>
-                    <div>
-                        <Link className={styles.blogLinks} to="/blog/going-to-mars">Going to Mars is a bad idea.</Link>
-                    </div>
-                    <div>
-                        Posts:
-                    </div>
-                    <div>
-                        <Link className={styles.blogLinks} to="/blog/another-blog-post">Another blog post</Link>
-                    </div>
+                    <Link className={styles.blogLinks} to="/blog/going-to-mars">Going to Mars is a bad idea.</Link>
+                </div>
+                <div>
+                    <Link className={styles.blogLinks} to="/blog/another-blog-post">Another blog post</Link>
                 </div>
             </div>
         );

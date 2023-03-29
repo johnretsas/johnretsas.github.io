@@ -1,0 +1,10 @@
+.card {
+    background: #555555;
+    box-shadow: 1px 1px 5px rgb(133, 132, 132);
+    padding: 10px;
+    height: 100px;
+    min-height: 100px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+}
