@@ -9,18 +9,18 @@ const GoingToMars = () => {
       </h1>
       <hr style={{ width: '100%' }} />
       <p className={styles.blogPost}>
-        The other day I was pondering colonising Mars, one of Elon Musk’s goals.
+        The other day I was pondering over colonising Mars, one of Elon Musk’s goals.
         At first glance it sounds romantic and idyllic, humans becoming a
         multi-planetary species. But then a strange thought occurred to me. Say
         we manage to go there and set up a settlement. A first city is created
         and then more. How is Mars going to be divided into countries ? Is it
         going to be a bit like America, where Europeans marched over there and
-        set up settlements, the years passed and the English people prevailed,
-        only for them to be banished as rules and the states claiming their
+        set up settlements, then years passed and the English people prevailed,
+        only for them to be banished as rulers and the states claiming their
         independence as a country ? Is going to be the birth of the United
         States of Mars - i.e. USM ? Say that happens, it’s not a bad thing in
         and of itself. The thing that terrified me was that Mars is arguably a
-        terrible place to live. There is no natural life there and the landscape
+        terrible place to live in. There is no natural life there and the landscape
         is plain red, rusty and sandy. The atmosphere is toxic and just like
         Elton John says, Mars is cold as hell. In other words, Mars, despite
         having hyper-advanced technological settlements, necessary to colonize
@@ -37,7 +37,7 @@ const GoingToMars = () => {
         real-estate will start becoming really valuable, like, really valuable.
         Obviously the people who will handle the Earth-Mars relocations will be
         huge billion (maybe trillion even) dollars industries, and their first
-        objective will be their profits and benefits. No one of them would like
+        objective will be their profits and benefits. None of them would like
         to live on Mars, because as we’ve said before, going to Mars is nothing
         more than an awesome adventure. Other than that, it’s going to be awful
         living there at the very least. Food will be factory-made,
