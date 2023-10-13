@@ -1,1 +1,1 @@
-Personal internet vertex for salutation.
+Personal web vertex for salutation.
