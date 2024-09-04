@@ -19,7 +19,7 @@ const App = () => {
   return (
     <Router>
       <div>
-        <Navbar />
+        {/* <Navbar /> */}
         <Switch>
           <Route  path="/blog/:blogId">
             <Blog />
