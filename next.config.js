@@ -11,7 +11,7 @@ if (isGithubActions) {
 
 module.exports = {
   assetPrefix: assetPrefix,
-  basePath: basePath,
+  basePath: "https://johnretsas.github.io/",
   images: {
     unoptimized: true,
   },
