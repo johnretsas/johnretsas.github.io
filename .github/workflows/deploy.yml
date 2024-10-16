@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
@@ -24,6 +25,6 @@ jobs:
         run: npm run build
 
       - name: Deploy to GitHub Pages
-        run: npm run deploy
+        run: npx gh-pages -d out
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
