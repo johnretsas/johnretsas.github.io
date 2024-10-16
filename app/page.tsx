@@ -10,9 +10,9 @@ export default function Page() {
         <strong className={styles.warmText}>
           Senior Full Stack Web Software Engineer 💻
         </strong>{" "}
-        with <strong className={styles.warmText}>7 years of experience</strong>{" "}
-        🏆, specializing in crafting high-performance, scalable web applications
-        🚀.
+        based in the UK 🇬🇧 with{" "}
+        <strong className={styles.warmText}>7 years of experience</strong> 🏆,
+        specializing in crafting high-performance, scalable web applications 🚀.
         <br />
         <br />I hold a{" "}
         <strong className={styles.warmText}>

@@ -91,7 +91,7 @@ export default function Blog({ params }) {
           {formatDate(post.metadata.publishedAt)}
         </p>
       </div>
-      <div>
+      <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
         {post.metadata.tags &&
           post.metadata.tags
             .split(",")
