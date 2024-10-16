@@ -1,51 +1,30 @@
 {
-  "name": "john",
-  "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/react": "^18.0.24",
-    "@types/react-dom": "^18.0.8",
-    "@types/react-icons": "^3.0.0",
-    "@types/react-router": "^5.1.19",
-    "@types/react-router-dom": "^5.3.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-icons": "^4.6.0",
-    "react-router-dom": "5.2.0",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
-  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build && rsync -av build/static/ ./static/ && rsync -av build/index.html ./index.html",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "next dev",
+    "build": "next build && next export",
+    "deploy": "gh-pages -d out",
+    "start": "next start"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "20": "^3.1.9",
+    "@tailwindcss/postcss": "4.0.0-alpha.13",
+    "@types/node": "20.11.17",
+    "@types/react": "18.2.55",
+    "@types/react-dom": "18.2.19",
+    "@vercel/analytics": "^1.1.3",
+    "@vercel/speed-insights": "^1.0.9",
+    "geist": "1.2.2",
+    "next": "canary",
+    "next-mdx-remote": "^4.4.1",
+    "postcss": "^8.4.35",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "sugar-high": "^0.6.0",
+    "tailwindcss": "4.0.0-alpha.13",
+    "typescript": "5.3.3"
   },
   "devDependencies": {
-    "source-map-loader": "^4.0.1",
-    "ts-loader": "^9.4.1",
-    "typescript": "^4.8.4",
-    "webpack-cli": "^4.10.0"
+    "gh-pages": "^6.2.0"
   }
 }

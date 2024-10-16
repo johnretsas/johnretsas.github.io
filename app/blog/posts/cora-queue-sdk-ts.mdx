@@ -1,0 +1,86 @@
+---
+title: CoraMQ - QueueClient v0.1.0
+publishedAt: "2024-10-16"
+tags: TypeScript, API, Queue, SDK
+author: John Retsas
+summary: A TypeScript client for interacting with a queue management API, allowing users to create queues, enqueue, dequeue, and scan items.
+---
+
+# Cora QueueClient v0.1.0
+
+`QueueClient` is a powerful TypeScript class designed to streamline interactions with the Cora queue service described [here](/blog/cora-queue-service) using the popular Axios library. 
+This client serves as an intuitive interface for developers who need to manage queue operations effectively, providing a comprehensive suite of features to handle various queue-related tasks seamlessly.
+
+## 📚 Table of Contents
+
+- [Installation](#installation) 🚀
+- [Usage](#usage) 📖
+  - [Importing](#importing) 🛠️
+  - [Creating an Instance](#creating-an-instance) ⚙️
+  - [Creating a Queue](#creating-a-queue) 🗄️
+  - [Enqueuing an Item](#enqueuing-an-item) 📦
+  - [Dequeuing an Item](#dequeuing-an-item) 📤
+  - [Scanning a Queue](#scanning-a-queue) 🔍
+
+## Installation
+
+Install Axios in your project:
+
+```bash
+npm install axios
+```
+
+## Usage
+
+### Importing
+
+```typescript
+import {
+  QueueClient,
+  QueueItem,
+  CreateQueueResponse,
+  EnqueueResponse,
+  DequeueResponse,
+  ScanResponse,
+} from "cora-sdk";
+```
+
+### Creating an Instance
+
+```typescript
+const queueClient = new QueueClient("http://localhost:8080");
+```
+
+### Creating a Queue
+
+```typescript
+const createQueueResponse: CreateQueueResponse = await queueClient.createQueue(
+  "myQueue"
+);
+```
+
+### Enqueuing an Item
+
+```typescript
+const item: QueueItem = {
+  id: "item-id-1",
+  payload: JSON.stringify({ name: "My Item" }),
+  priority: 1,
+};
+const enqueueResponse: EnqueueResponse = await queueClient.enqueue(
+  "myQueue",
+  item
+);
+```
+
+### Dequeuing an Item
+
+```typescript
+const dequeueResponse: DequeueResponse = await queueClient.dequeue("myQueue");
+```
+
+### Scanning a Queue
+
+```typescript
+const scanResponse: ScanResponse = await queueClient.scan("myQueue");
+```
