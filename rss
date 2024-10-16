@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <rss version="2.0">
+    <channel>
+        <title>My Portfolio</title>
+        <link>https://portfolio-blog-starter.vercel.app</link>
+        <description>This is my portfolio RSS feed</description>
+        <item>
+          <title>CoraMQ - QueueClient v0.1.0</title>
+          <link>https://portfolio-blog-starter.vercel.app/blog/cora-queue-sdk-ts</link>
+          <description>A TypeScript client for interacting with a queue management API, allowing users to create queues, enqueue, dequeue, and scan items.</description>
+          <pubDate>Wed, 16 Oct 2024 00:00:00 GMT</pubDate>
+        </item>
+<item>
+          <title>CoraMQ - Building a Concurrent In-Memory Queue Service in Go</title>
+          <link>https://portfolio-blog-starter.vercel.app/blog/cora-queue-service</link>
+          <description>Learn how to build a high-performance, concurrent in-memory queue service in Go that supports multiple clients, priority-based message processing, and visibility timeouts.</description>
+          <pubDate>Sat, 05 Oct 2024 00:00:00 GMT</pubDate>
+        </item>
+    </channel>
+  </rss>
