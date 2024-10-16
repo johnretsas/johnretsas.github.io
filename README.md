@@ -1,7 +1,3 @@
-Personal Portfolio/Blog
-
-# John Retsas' Personal Website
-
 Welcome to the repository for my personal website hosted on GitHub Pages.
 
 ## Table of Contents
