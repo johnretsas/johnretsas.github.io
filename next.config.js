@@ -16,4 +16,5 @@ module.exports = {
     unoptimized: true,
   },
   trailingSlash: true, // This is important for static exports
+  output: "export",
 };
