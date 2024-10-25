@@ -1,0 +1,153 @@
+---
+title: TrueLayer Connect - Building a Secure OAuth2 Integration with TrueLayer in Go
+publishedAt: "2024-10-24"
+tags: Golang, OAuth2, API, TrueLayer, Fintech
+summary: Learn how to build a secure OAuth2 integration with TrueLayer in Go, featuring multiple endpoints to authenticate, retrieve accounts, and store access tokens using a simple in-memory token manager.
+---
+
+## Overview
+
+# TrueLayer Connect v0.1.0
+
+I recently built **TrueLayer Connect**, a **Go-based OAuth2 Integration Service** that provides a seamless and secure method to connect with TrueLayer’s API, manage access tokens, and retrieve user account data. This service is ideal for financial applications where secure OAuth2 integration and data retrieval are essential.
+
+The objective was to create a reliable, straightforward API that handles user authentication, token exchange, and account data retrieval using a thread-safe in-memory token manager.
+
+## Key Features
+
+- **OAuth2 Authentication**: Redirects users to authenticate via TrueLayer and exchanges authorization codes for access tokens.
+- **Access Token Management**: Uses a thread-safe singleton `TokenManager` to store and retrieve access tokens for secure session handling.
+- **Account Data Retrieval**: Fetches account data from TrueLayer's API using stored tokens.
+- **Concurrency-Safe Design**: TokenManager uses mutex locks to handle concurrent access, making it suitable for multi-client applications.
+
+## Architecture Overview
+
+TrueLayer Connect is composed of three main components:
+
+- **TokenManager**: A singleton pattern for storing and managing tokens securely and efficiently.
+- **Handlers**: Core logic for HTTP endpoints, including redirecting to TrueLayer, handling the OAuth2 callback, and fetching account data.
+- **Server**: Defines and manages API endpoints using `Go-Chi` for lightweight routing and middleware logging.
+
+## API Overview
+
+TrueLayer Connect offers several endpoints to interact with TrueLayer’s authentication flow and retrieve account data. Here’s a breakdown:
+
+### 1. **Redirect to TrueLayer Authentication**
+
+- **Endpoint**: `/`
+- **Method**: `GET`
+- **Description**: Redirects the user to TrueLayer’s OAuth2 login page, including the client ID, redirect URI, and permissions.
+
+#### Example Flow:
+
+1. User initiates login by visiting `/`.
+2. Service redirects the user to TrueLayer for authentication with pre-configured permissions and credentials.
+3. Successful login redirects back to `/callback` with an authorization code.
+
+### 2. **OAuth Callback**
+
+- **Endpoint**: `/callback`
+- **Method**: `GET`
+- **Description**: Receives the authorization code from TrueLayer, exchanges it for an access token, and stores the token in `TokenManager`.
+
+#### Request Parameters
+
+- **Query Parameter**: `code` (the authorization code from TrueLayer)
+
+#### Response
+
+- **Success**:
+
+```json
+{
+  "status": "success",
+  "token": "<access_token>"
+}
+```
+
+- **Failure**:
+
+```json
+{
+  "status": "error",
+  "message": "Failed to exchange code for token"
+}
+```
+
+### 3. **Get Accounts**
+
+- **Endpoint**: `/accounts`
+- **Method**: `GET`
+- **Description**: Retrieves account information from TrueLayer using the stored access token.
+
+#### Response
+
+- **Success**:
+
+```json
+{
+  "results": [
+    {
+      "update_timestamp": "2017-02-07T17:29:24.740802Z",
+      "account_id": "f1234560abf9f57287637624def390871",
+      "account_type": "TRANSACTION",
+      "display_name": "Club Lloyds",
+      "currency": "GBP",
+      "account_number": {
+        "iban": "GB35LOYD12345678901234",
+        "number": "12345678",
+        "sort_code": "12-34-56",
+        "swift_bic": "LOYDGB2L"
+      },
+      "provider": {
+        "provider_id": "lloyds"
+      }
+    }
+  ]
+}
+```
+
+- **Failure** (if the token is not found):
+
+```json
+{
+  "status": "error",
+  "message": "Token not found"
+}
+```
+
+## Example `.env` Configuration
+
+Create a `.env` file with the following TrueLayer credentials and server configuration:
+
+```bash
+TRUE_LAYER_CLIENT_ID=your_client_id
+TRUE_LAYER_CLIENT_SECRET=your_client_secret
+TRUE_LAYER_REDIRECT_URI=http://localhost:3000/callback
+PORT=3000
+```
+
+## Getting Started
+
+1. **Clone the Repository**:
+
+   ```bash
+   git clone <repo-url>
+   cd truelayer-connect
+   ```
+
+2. **Install Dependencies**:
+
+   ```bash
+   go mod tidy
+   ```
+
+3. **Run the Application**:
+
+   ```bash
+   go run main.go
+   ```
+
+## Conclusion
+
+TrueLayer Connect is a streamlined solution for integrating OAuth2 authentication and secure data retrieval with TrueLayer’s API. With simple endpoints for managing authentication flow and account retrieval, it’s a practical choice for financial applications requiring secure and reliable API connections.
