@@ -1,6 +1,9 @@
+require("dotenv").config();
+
+const isProd = process.env.NODE_ENV !== "development";
+
 module.exports = {
-  assetPrefix: "https://johnretsas.github.io/",
-  basePath: "https://johnretsas.github.io/",
+  assetPrefix: isProd ? "https://johnretsas.github.io" : "",
   images: {
     unoptimized: true,
   },
