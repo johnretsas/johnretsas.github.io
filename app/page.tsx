@@ -29,9 +29,11 @@ export default function Page() {
         <br />
         While React is my go-to tool at work, I love exploring new technologies
         🌐 in my personal projects and at work. You'll often find me coding in{" "}
-        <strong className={styles.warmText}>Golang, Rust, and Kotlin</strong> .
-        I'm also a big fan of serverless technologies ☁️ and have built several
-        serverless applications using{" "}
+        <strong className={styles.warmText}>
+          Golang, Python, Rust, and Kotlin
+        </strong>{" "}
+        . I'm also a big fan of serverless technologies ☁️ and have built
+        several serverless applications using{" "}
         <strong className={styles.warmText}>
           AWS Lambda, AWS S3, and AWS SQS
         </strong>{" "}
