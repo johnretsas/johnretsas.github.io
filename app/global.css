@@ -151,9 +151,27 @@ table {
 .title {
   text-wrap: balance;
 }
+@media (min-width: 768px) {
+  a:hover {
+    color: #f6ad55;
+    font-weight: bold;
+    transition: all 0.1s;
 
-a:hover {
-  color: #f6ad55;
-  font-weight: bold;
-  transition: all 0.1s;
+    p {
+      color: #f6ad55;
+      font-weight: bold;
+      transition: all 0.1s;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  a:active {
+    color: #f6ad55;
+
+    p {
+      color: #f6ad55;
+
+    }
+  }
 }
