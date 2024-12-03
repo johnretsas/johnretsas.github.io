@@ -1,14 +1,14 @@
 ---
-title: Real-Time Chat App Architecture with AWS - A Scalable Approach  
-publishedAt: "2024-11-27"  
-tags: AWS, Architecture, Real-Time, DynamoDB, SQS, WebSocket  
-author: John Retsas  
+title: Real-Time Chat App Architecture with AWS - A Scalable Approach
+publishedAt: "2024-11-27"
+tags: AWS, Architecture, Real-Time, DynamoDB, SQS, WebSocket
+author: John Retsas
 summary: Designing a scalable, reliable, and fast architecture for a real-time chat application using AWS services such as SQS, DynamoDB, and ECS.
 ---
 
 # Introduction
 
-Creating a real-time chat app presents us with a few challenges. Namely, it has to be **fast**, **scalable**, and **reliable**. No user wants a chat app to work slowly or for their messages to go undelivered. Furthermore, the more users a chat app gets, the more valuable it becomes. 
+Creating a real-time chat app presents us with a few challenges. Namely, it has to be **fast**, **scalable**, and **reliable**. No user wants a chat app to work slowly or for their messages to go undelivered. Furthermore, the more users a chat app gets, the more valuable it becomes.
 
 There are as many chat app architectures as there are chat apps, each with peculiarities that require attention. Without specific references, I will outline an architecture for developing a robust chat system that scales and provides a pleasant user experience.
 
@@ -25,8 +25,6 @@ For this project, we'll focus on implementing the following features:
 - **Load balancing**
 - **Microservices architecture**, decoupling crucial components
 
----
-
 ## Deriving the Architecture
 
 ### Client
@@ -39,8 +37,6 @@ We start with the **clients**. For simplicity, let’s consider a web-based chat
 
 Since SEO is not a requirement (everything is private and behind authentication), there’s no need for a server-side rendering (SSR) solution.
 
----
-
 ### Sending Messages
 
 Let’s say **User A** sends a message to **User B**. Two key considerations are:
@@ -48,26 +44,20 @@ Let’s say **User A** sends a message to **User B**. Two key considerations are
 1. The message must be **permanently stored**.
 2. **User B must receive it.**
 
-We'll use a **message broker** to handle message transmission. Clients send messages to this broker, which processes them in a **scalable** and **decoupled** way. 
+We'll use a **message broker** to handle message transmission. Clients send messages to this broker, which processes them in a **scalable** and **decoupled** way.
 
 For this architecture, we’ll use **Amazon SQS** to store messages. Since processing may occasionally fail, we’ll include a **Dead Letter Queue (DLQ)** as a companion to the main queue for handling problematic messages.
 
----
-
 ### Consuming Messages for Permanent Storage
 
-The **SQS queue** will be consumed by either an **ECS cluster** or a **Lambda function**. For simplicity, let’s choose a Lambda function. 
+The **SQS queue** will be consumed by either an **ECS cluster** or a **Lambda function**. For simplicity, let’s choose a Lambda function.
 
 - The Lambda function subscribes to the SQS queue and polls messages for consumption.
 - Messages are processed and stored in a **DynamoDB table**.
 
----
-
 ### Decoupling Notifications
 
 To handle notifications for active users, the same Lambda function will send a **notification message** for each processed message to a separate **Notification Messages queue**. This queue will also have an associated DLQ.
-
----
 
 ### Consuming Notification Messages
 
@@ -79,7 +69,5 @@ Instead, we’ll use an **ECS cluster** to:
 - Send real-time notifications to users
 
 Additionally, a **DynamoDB table** will store the connection IDs to facilitate message delivery.
-
----
 
 This architecture provides a foundation for building a fast, scalable, and reliable chat application while addressing challenges like message persistence, real-time notifications, and scalability.
