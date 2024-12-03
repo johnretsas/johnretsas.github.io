@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 ::selection {
   background-color: #47a3f3;
@@ -54,10 +54,10 @@ html {
 
 .prose .anchor:after {
   @apply text-neutral-300 dark:text-neutral-700;
-  content: '#';
+  content: "#";
 }
 
-.prose *:hover>.anchor {
+.prose *:hover > .anchor {
   @apply visible;
 }
 
@@ -116,7 +116,7 @@ html {
   @apply list-decimal pl-6;
 }
 
-.prose> :first-child {
+.prose > :first-child {
   /* Override removing top margin, causing layout shift */
   margin-top: 1.25em !important;
   margin-bottom: 1.25em !important;
@@ -134,8 +134,8 @@ pre {
 }
 
 /* Remove Safari input shadow on mobile */
-input[type='text'],
-input[type='email'] {
+input[type="text"],
+input[type="email"] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -151,15 +151,25 @@ table {
 .title {
   text-wrap: balance;
 }
+
+a {
+  text-decoration: underline 0.15em rgba(0, 0, 0, 0);
+  text-underline-offset: 1px;
+  transition: text-decoration-color 300ms;
+}
+
 @media (min-width: 768px) {
   a:hover {
     color: #f6ad55;
-    font-weight: bold;
     transition: all 0.1s;
+    text-decoration: underline;
+    text-decoration-thickness: 0.15em;
+    text-underline-offset: 4px;
+    text-decoration-color: #f6ad55;
+    transition: text-decoration-color 300ms;
 
     p {
       color: #f6ad55;
-      font-weight: bold;
       transition: all 0.1s;
     }
   }
@@ -171,7 +181,6 @@ table {
 
     p {
       color: #f6ad55;
-
     }
   }
 }
