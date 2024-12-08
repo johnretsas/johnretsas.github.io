@@ -1,0 +1,128 @@
+---
+title: "Getting Started with a Node.js TypeScript Boilerplate"
+description: "Learn how to set up a Node.js project with TypeScript, Axios, ESLint, and modern tools for scalable application development."
+date: "2024-12-08"
+tags: ["Node.js", "TypeScript", "Boilerplate", "Axios", "ESLint", "JavaScript"]
+---
+
+# Getting Started with a Node.js TypeScript Boilerplate
+
+When building modern JavaScript applications, using TypeScript can provide type safety, better tooling, and enhanced maintainability. In this blog post, we will walk through setting up a **Node.js project with TypeScript**, integrating **Axios for HTTP requests**, and using **ESLint** for clean code.
+
+## Why Use TypeScript for Node.js?
+
+TypeScript is a superset of JavaScript that adds static typing, which helps you catch errors early in the development process. It’s especially useful in large-scale applications where keeping track of types can become challenging. With TypeScript, you can:
+
+- Catch **type errors** at compile-time rather than runtime.
+- Leverage **intellisense** for better developer experience in IDEs.
+- Have more **robust refactoring** and maintainable code.
+
+## Features of the Node.js TypeScript Boilerplate
+
+This Node.js boilerplate includes the essential features for fast development:
+
+- **TypeScript**: The project uses modern TypeScript with `ESNext` settings, enabling the latest JavaScript features and module resolution.
+- **Axios**: For making HTTP requests. It's a lightweight and promise-based library.
+- **ESLint**: Ensures code quality by enforcing a set of recommended rules for clean, consistent code.
+- **tsx**: The project uses `tsx` to enable direct TypeScript execution in development, providing hot-reloading.
+- **Type Declarations**: Automatically generates `.d.ts` files to help with type checking and improve IDE support.
+
+## How to Set Up the Node.js TypeScript Boilerplate
+
+### Step 1: Clone the Repository
+
+Start by cloning the repository to your local machine:
+
+```bash
+git clone https://github.com/johnretsas/node-ts-boilerplate.git
+cd node-ts-boilerplate
+```
+
+### Step 2: Install Dependencies
+
+Use npm to install the necessary dependencies:
+
+```bash
+npm install
+```
+
+This will install all the required packages, including TypeScript, Axios, ESLint, and `tsx` for running the app in development mode.
+
+### Step 3: Run the Project
+
+#### Development Mode
+
+To start the application in development mode with hot reloading, run:
+
+```bash
+npm run dev
+```
+
+This command will use `tsx` to watch for file changes and automatically restart the application.
+
+#### Build the Application
+
+To compile your TypeScript code into JavaScript, use:
+
+```bash
+npm run build
+```
+
+This will create a `dist/` folder containing your compiled JavaScript files.
+
+#### Start the Application
+
+Once the project is built, you can start the application with:
+
+```bash
+npm start
+```
+
+This command will execute the compiled JavaScript files from the `dist/` folder.
+
+#### Clean Build Files
+
+To remove the compiled files from the `dist/` folder, run:
+
+```bash
+npm run clean
+```
+
+### Step 4: Lint Your Code
+
+Use ESLint to check for code quality and consistency:
+
+```bash
+npm run lint
+```
+
+This will run ESLint over your TypeScript files and report any issues or violations of coding standards.
+
+### Step 5: Type Checking
+
+You can check your TypeScript code for type errors without emitting files using:
+
+```bash
+npm run type-check
+```
+
+This will perform a type-checking operation based on your `tsconfig.json` settings.
+
+## Why Use This Boilerplate?
+
+This Node.js TypeScript boilerplate provides you with a solid foundation for building scalable and maintainable applications. Some benefits include:
+
+- **Type Safety**: With TypeScript, you avoid many common runtime errors related to type mismatches.
+- **Cleaner Code**: ESLint ensures that your code is clean, consistent, and easy to maintain.
+- **Efficient Development**: Using `tsx` for development gives you fast iteration with hot reloading and minimal setup.
+- **Simple HTTP Requests**: Axios is preconfigured to handle HTTP requests, making it easier to fetch data and interact with APIs.
+
+## Conclusion
+
+Setting up a Node.js project with TypeScript might seem overwhelming at first, but with this boilerplate, you can get started quickly and build modern, robust applications. The integration of TypeScript, Axios, and ESLint in this project ensures that your development process is streamlined, efficient, and productive.
+
+For more information on the tools used in this boilerplate, check out the following resources:
+
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+- [Axios Documentation](https://axios-http.com/docs/intro)
+- [ESLint Documentation](https://eslint.org/docs/)
