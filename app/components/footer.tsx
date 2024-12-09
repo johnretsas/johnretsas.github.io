@@ -1,3 +1,4 @@
+import { FaDev, FaGitAlt } from "react-icons/fa";
 function ArrowIcon() {
   return (
     <svg
@@ -12,7 +13,7 @@ function ArrowIcon() {
         fill="currentColor"
       />
     </svg>
-  )
+  );
 }
 
 export default function Footer() {
@@ -28,6 +29,7 @@ export default function Footer() {
           >
             <ArrowIcon />
             <p className="ml-2 h-7">github</p>
+            <FaGitAlt size={25} className="ml-2"/>
           </a>
         </li>
         <li>
@@ -39,6 +41,7 @@ export default function Footer() {
           >
             <ArrowIcon />
             <p className="ml-2 h-7">view source</p>
+            <FaGitAlt size={25} className="ml-2"/>
           </a>
         </li>
         <li>
@@ -50,6 +53,7 @@ export default function Footer() {
           >
             <ArrowIcon />
             <p className="ml-2 h-7">dev.to</p>
+            <FaDev size={25} className="ml-2"/>
           </a>
         </li>
       </ul>
@@ -57,5 +61,5 @@ export default function Footer() {
         © {new Date().getFullYear()} MIT Licensed
       </p>
     </footer>
-  )
+  );
 }
