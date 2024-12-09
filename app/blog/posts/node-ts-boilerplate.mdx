@@ -2,73 +2,101 @@
 title: Getting Started with a Node.js TypeScript Boilerplate
 summary: Learn how to set up a Node.js project with TypeScript, Axios, ESLint, and modern tools for scalable application development.
 publishedAt: "2024-12-08"
-tags: Node.js, TypeScript, Boilerplate, Axios, ESLint, JavaScript
+tags: Node.js, TypeScript, Boilerplate, Axios, ESLint, JavaScript, esbuild
 ---
 
-# Getting Started with a Node.js TypeScript Boilerplate
+# Getting Started with a Node.js TypeScript Boilerplate using esbuild
 
-When building modern JavaScript applications, using TypeScript can provide type safety, better tooling, and enhanced maintainability. In this blog post, we will walk through setting up a **Node.js project with TypeScript**, integrating **Axios for HTTP requests**, and using **ESLint** for clean code.
+Setting up a modern Node.js project with **TypeScript**, **Axios**, and **ESLint** provides a solid foundation for building scalable applications. But what if you want a fast and efficient bundling tool to speed up your development process? Enter **esbuild**—a fast bundler and minifier that will help you compile TypeScript code and bundle your application with ease.
+
+In this blog post, we will walk through setting up a **Node.js project with TypeScript**, using **esbuild** for bundling, and integrating **Axios** for HTTP requests and **ESLint** for maintaining code quality.
 
 ## Why Use TypeScript for Node.js?
 
-TypeScript is a superset of JavaScript that adds static typing, which helps you catch errors early in the development process. It’s especially useful in large-scale applications where keeping track of types can become challenging. With TypeScript, you can:
+TypeScript provides type safety and improved tooling over plain JavaScript, allowing you to catch errors early and build maintainable applications. Benefits of using TypeScript include:
 
-- Catch **type errors** at compile-time rather than runtime.
-- Leverage **intellisense** for better developer experience in IDEs.
-- Have more **robust refactoring** and maintainable code.
+- **Type Safety**: Helps to catch type errors before runtime, reducing bugs.
+- **Enhanced Developer Experience**: Tools like autocompletion and inline documentation make coding easier.
+- **Better Refactoring**: The strict typing allows for safer, easier code refactoring.
 
-## Features of the Node.js TypeScript Boilerplate
+## Why Use esbuild?
 
-This Node.js boilerplate includes the essential features for fast development:
+While TypeScript provides the structure and safety for your code, bundlers like **esbuild** help with bundling your TypeScript files into a single, optimized output for deployment. Esbuild offers:
 
-- **TypeScript**: The project uses modern TypeScript with `ESNext` settings, enabling the latest JavaScript features and module resolution.
-- **Axios**: For making HTTP requests. It's a lightweight and promise-based library.
-- **ESLint**: Ensures code quality by enforcing a set of recommended rules for clean, consistent code.
-- **tsx**: The project uses `tsx` to enable direct TypeScript execution in development, providing hot-reloading.
-- **Type Declarations**: Automatically generates `.d.ts` files to help with type checking and improve IDE support.
+- **Lightning-fast performance**: esbuild is known for its speed, offering quick builds and fast rebuilds during development.
+- **Built-in minification**: Minifying your code for production is easy with esbuild.
+- **Simple configuration**: It’s simple to set up and integrates well with TypeScript projects.
+
+## Features of the Node.js TypeScript Boilerplate with esbuild
+
+This boilerplate includes everything you need to get started:
+
+- **TypeScript**: The project is configured to use modern TypeScript with `ESNext` module support, enabling the latest JavaScript features.
+- **Axios**: Axios is pre-configured for making HTTP requests.
+- **ESLint**: To ensure your code follows consistent coding standards.
+- **esbuild**: Used for bundling your TypeScript code into a single output file.
+- **Type Declarations**: Automatic generation of `.d.ts` files for type support and IDE autocompletion.
 
 ## How to Set Up the Node.js TypeScript Boilerplate
 
 ### Step 1: Clone the Repository
 
-Start by cloning the repository to your local machine:
+First, clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/johnretsas/node-ts-boilerplate.git
+git clone https://github.com/yourusername/node-ts-boilerplate.git
 cd node-ts-boilerplate
 ```
 
 ### Step 2: Install Dependencies
 
-Use npm to install the necessary dependencies:
+Run the following command to install the necessary dependencies:
 
 ```bash
 npm install
 ```
 
-This will install all the required packages, including TypeScript, Axios, ESLint, and `tsx` for running the app in development mode.
+This will install all required packages, including TypeScript, Axios, ESLint, `esbuild`, and `tsx`.
 
 ### Step 3: Run the Project
 
 #### Development Mode
 
-To start the application in development mode with hot reloading, run:
+To start the application in development mode with hot-reloading, run:
 
 ```bash
 npm run dev
 ```
 
-This command will use `tsx` to watch for file changes and automatically restart the application.
+This will use `tsx` to automatically reload the application when changes are detected in the source files.
 
 #### Build the Application
 
-To compile your TypeScript code into JavaScript, use:
+To compile your TypeScript code into a bundled JavaScript file using esbuild, run:
 
 ```bash
 npm run build
 ```
 
-This will create a `dist/` folder containing your compiled JavaScript files.
+The `build.js` script uses esbuild to bundle your TypeScript files and outputs the result to `dist/bundle.js`.
+
+Here's a quick look at the `build.js` script:
+
+```js
+import { build } from 'esbuild';
+
+const isProd = process.env.NODE_ENV === 'production'; // Check if we're in production
+
+build({
+  entryPoints: ['./src/index.ts'],
+  bundle: true,
+  outfile: './dist/bundle.js',
+  resolveExtensions: ['.ts', '.tsx', '.js', '.json'],
+  sourcemap: !isProd, // Enable source maps in development
+  minify: isProd, // Minify in production
+  target: 'esnext', // Target modern JavaScript
+}).catch(() => process.exit(1)); // Exit process if build fails
+```
 
 #### Start the Application
 
@@ -78,11 +106,11 @@ Once the project is built, you can start the application with:
 npm start
 ```
 
-This command will execute the compiled JavaScript files from the `dist/` folder.
+This will run the compiled `bundle.js` from the `dist/` folder.
 
 #### Clean Build Files
 
-To remove the compiled files from the `dist/` folder, run:
+To remove the compiled build files, run:
 
 ```bash
 npm run clean
@@ -90,39 +118,55 @@ npm run clean
 
 ### Step 4: Lint Your Code
 
-Use ESLint to check for code quality and consistency:
+To maintain code quality, run ESLint to check for errors or issues:
 
 ```bash
 npm run lint
 ```
 
-This will run ESLint over your TypeScript files and report any issues or violations of coding standards.
+This will run ESLint across your project and provide feedback on any issues.
 
 ### Step 5: Type Checking
 
-You can check your TypeScript code for type errors without emitting files using:
+You can perform type checking to ensure that your TypeScript code is correctly typed without generating output files using:
 
 ```bash
 npm run type-check
 ```
 
-This will perform a type-checking operation based on your `tsconfig.json` settings.
+This will validate the types in your TypeScript files based on the settings in your `tsconfig.json`.
 
-## Why Use This Boilerplate?
+## Development vs. Production
 
-This Node.js TypeScript boilerplate provides you with a solid foundation for building scalable and maintainable applications. Some benefits include:
+In your build process, it’s important to distinguish between development and production environments. In **development**, you want fast rebuilds with source maps enabled for easier debugging. In **production**, however, you should minify your code to reduce file size and improve load times.
 
-- **Type Safety**: With TypeScript, you avoid many common runtime errors related to type mismatches.
-- **Cleaner Code**: ESLint ensures that your code is clean, consistent, and easy to maintain.
-- **Efficient Development**: Using `tsx` for development gives you fast iteration with hot reloading and minimal setup.
-- **Simple HTTP Requests**: Axios is preconfigured to handle HTTP requests, making it easier to fetch data and interact with APIs.
+The `build.js` script checks the `NODE_ENV` environment variable to adjust the configuration for each environment:
+
+- **Development**: Enables source maps and skips minification for faster rebuilds.
+- **Production**: Minifies the code to reduce file size and excludes source maps.
 
 ## Conclusion
 
-Setting up a Node.js project with TypeScript might seem overwhelming at first, but with this boilerplate, you can get started quickly and build modern, robust applications. The integration of TypeScript, Axios, and ESLint in this project ensures that your development process is streamlined, efficient, and productive.
+This boilerplate gives you a fast and efficient way to develop and bundle your Node.js applications with TypeScript, Axios, ESLint, and **esbuild**. By using **esbuild** for bundling, you're getting a lightning-fast build process, and the combination of **TypeScript** and **Axios** ensures a robust and maintainable codebase.
 
 For more information on the tools used in this boilerplate, check out the following resources:
 
 - [TypeScript Documentation](https://www.typescriptlang.org/docs/)
 - [Axios Documentation](https://axios-http.com/docs/intro)
+- [esbuild Documentation](https://esbuild.github.io/)
 - [ESLint Documentation](https://eslint.org/docs/)
+
+---
+
+**Author**: Your Name
+
+---
+
+This version of the blog post highlights **esbuild** as the bundling tool, explaining how it fits into the overall project setup and how it enhances both development and production workflows. The post also covers the development vs production build settings and includes specific configuration examples, making it SEO-friendly while remaining actionable for developers.
+```
+
+### Key Updates:
+1. **esbuild Integration**: The post now emphasizes the use of **esbuild** for bundling TypeScript and explains the setup for both development and production environments.
+2. **Node.js with TypeScript**: The integration of TypeScript with esbuild is highlighted, helping readers understand why esbuild is an excellent choice for bundling.
+3. **Development vs Production**: The post details how the build script handles both environments, adjusting for source maps and minification.
+4. **SEO Optimized**: Keywords such as "Node.js TypeScript", "esbuild", "Axios", and "bundling" are incorporated to boost search engine visibility.
