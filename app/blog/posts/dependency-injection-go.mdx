@@ -9,8 +9,6 @@ summary: Learn about Dependency Injection in Go, its benefits, and how to implem
 
 Dependency Injection (DI) is a concept that often confuses developers at first, but it's actually quite simple and incredibly powerful. This article explains what DI is, why it's useful, and how to implement it in Go (Golang) with clear examples.
 
----
-
 ## **What is Dependency Injection?**
 
 Dependency Injection is a programming design pattern where an object (or function) gets its dependencies from an external source rather than creating them itself.
@@ -19,7 +17,6 @@ Think of it like this: instead of a chef growing their own vegetables, they rece
 
 In software, dependencies are often other objects or services that a piece of code needs to function. With DI, these dependencies are provided to the code rather than hardcoded within it.
 
----
 
 ## **Why Use Dependency Injection?**
 
@@ -27,15 +24,11 @@ In software, dependencies are often other objects or services that a piece of co
 2. **Improved Testability**: You can easily inject mock dependencies for testing purposes.
 3. **Easier Maintenance**: Changing a dependency (e.g., swapping a database library) doesn’t require changes to the dependent code.
 
----
-
 ## **Dependency Injection in Go**
 
 Go is a simple and straightforward language. It doesn’t have a built-in DI framework like some other languages (e.g., Spring in Java), but its simplicity makes manual DI easy to implement.
 
 Let’s walk through an example.
-
----
 
 ## **A Practical Example**
 
@@ -55,8 +48,6 @@ type Database interface {
 }
 ```
 
----
-
 ### **Step 2: Implement the Dependency**
 Now, create a concrete implementation of the `Database` interface. For this example, we'll simulate a database.
 
@@ -69,8 +60,6 @@ func (db *MySQLDatabase) SavePost(post string) error {
     return nil
 }
 ```
-
----
 
 ### **Step 3: Inject the Dependency**
 Create a service that depends on the `Database` interface. Inject the dependency via the constructor.
@@ -92,8 +81,6 @@ func (service *BlogService) CreatePost(post string) error {
 }
 ```
 
----
-
 ### **Step 4: Use the Dependency**
 Finally, tie everything together. Instantiate the dependency and inject it into the `BlogService`.
 
@@ -113,14 +100,11 @@ func main() {
 }
 ```
 
----
-
 ## **How Does This Work?**
 
 - The `BlogService` only depends on the `Database` interface, not the concrete `MySQLDatabase` implementation.
 - This means you can swap out `MySQLDatabase` with another implementation (e.g., a mock database for testing) without changing the `BlogService` code.
 
----
 
 ## **Testing with Dependency Injection**
 
@@ -158,7 +142,6 @@ With the mock implementation, you can test `BlogService` without worrying about 
 - When you want to make your code easier to test.
 - When you anticipate needing to replace or extend dependencies in the future.
 
----
 
 ## **Conclusion**
 
