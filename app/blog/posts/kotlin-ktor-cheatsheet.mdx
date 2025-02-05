@@ -3,16 +3,17 @@ title: Kotlin Ktor Cheat Sheet
 publishedAt: "2025-02-05"
 tags: Kotlin, Ktor, Web Development, Authentication, Testing
 summary: A comprehensive Kotlin Ktor cheat sheet covering routes, authentication, testing, JWT, and more.
+
 ---
+
 
 # **Kotlin Ktor Cheat Sheet** 🚀
 
 A quick reference guide for setting up and working with Ktor in Kotlin.
 
-
-
 ## **1. Setting Up Ktor**
 Install the required dependencies in `build.gradle.kts`:
+
 
 ```kotlin
 dependencies {
@@ -22,9 +23,6 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.x.x")
 }
 ```
-
-
-
 ## **2. Defining Routes**
 ```kotlin
 fun Application.routes() {
@@ -39,9 +37,6 @@ fun Application.routes() {
     }
 }
 ```
-
-
-
 ## **3. Handling Request Parameters**
 ```kotlin
 get("/api/scores/riskGroup") {
@@ -57,8 +52,6 @@ get("/api/scores/riskGroup") {
 }
 ```
 
-
-
 ## **4. Middleware (Plugins)**
 ```kotlin
 fun Application.installPlugins() {
@@ -73,9 +66,6 @@ fun Application.installPlugins() {
     }
 }
 ```
-
-
-
 ## **5. Singleton Mock Database**
 ```kotlin
 object MockDatabase {
@@ -87,16 +77,12 @@ object MockDatabase {
     fun clear() { data.clear() }
 }
 ```
-
 **Usage:**
 ```kotlin
 MockDatabase.insert("user1", "Alice")
 println(MockDatabase.get("user1")) // Alice
 MockDatabase.delete("user1")
 ```
-
-
-
 ## **6. JWT Authentication**
 ### **Generating a JWT**
 ```kotlin
@@ -124,8 +110,6 @@ fun validateJWT(jwt: String): String {
 }
 ```
 
-
-
 ## **7. Hashing with SHA-256**
 ```kotlin
 fun hashSHA256(input: String): String {
@@ -139,9 +123,6 @@ fun hashSHA256(input: String): String {
 val hashed = hashSHA256("password123")
 println(hashed) // Prints hashed value
 ```
-
-
-
 ## **8. Mocking with `coEvery` for Unit Tests**
 Using **MockK** to mock service calls:
 ```kotlin
@@ -156,9 +137,6 @@ fun `given fraud score found when GET scores then respond OK`() = runTestApplica
     response.status shouldBe HttpStatusCode.OK
 }
 ```
-
-
-
 ## **9. Controller Handler**
 ```kotlin
 val healthController: suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> Unit = {
@@ -171,9 +149,6 @@ val healthController: suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> U
 ```kotlin
 get("/health/liveness", healthController)
 ```
-
-
-
 ## **10. Handling JSON Responses**
 ```kotlin
 data class ApiResponse(val message: String)
@@ -195,4 +170,3 @@ val riskGroup = RiskGroup.values()[fraudScore.value] // Convert ordinal to Enum
 
 ## **Conclusion**
 This **Kotlin Ktor Cheat Sheet** provides a quick reference for setting up Ktor, defining routes, handling authentication, hashing data, testing, and working with singleton databases. 🚀
-```
