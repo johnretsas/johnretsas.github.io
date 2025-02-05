@@ -1,0 +1,198 @@
+---
+title: Kotlin Ktor Cheat Sheet
+publishedAt: "2025-02-05"
+tags: Kotlin, Ktor, Web Development, Authentication, Testing
+summary: A comprehensive Kotlin Ktor cheat sheet covering routes, authentication, testing, JWT, and more.
+---
+
+# **Kotlin Ktor Cheat Sheet** 🚀
+
+A quick reference guide for setting up and working with Ktor in Kotlin.
+
+
+
+## **1. Setting Up Ktor**
+Install the required dependencies in `build.gradle.kts`:
+
+```kotlin
+dependencies {
+    implementation("io.ktor:ktor-server-core:2.x.x")
+    implementation("io.ktor:ktor-server-netty:2.x.x")
+    implementation("io.ktor:ktor-server-content-negotiation:2.x.x")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.x.x")
+}
+```
+
+
+
+## **2. Defining Routes**
+```kotlin
+fun Application.routes() {
+    routing {
+        get("/health/liveness") {
+            call.respond(HttpStatusCode.OK, HealthResponse(2.0))
+        }
+
+        post("/authentication/login") {
+            call.respond(HttpStatusCode.OK)
+        }
+    }
+}
+```
+
+
+
+## **3. Handling Request Parameters**
+```kotlin
+get("/api/scores/riskGroup") {
+    val person = with(call.request.queryParameters) {
+        Person(
+            email = get("email") ?: throw MissingRequestParameterException("email"),
+            firstName = get("firstName") ?: throw MissingRequestParameterException("firstName"),
+            lastName = get("lastName") ?: throw MissingRequestParameterException("lastName"),
+            postcode = get("postcode") ?: throw MissingRequestParameterException("postcode")
+        )
+    }
+    call.respond(HttpStatusCode.OK, person)
+}
+```
+
+
+
+## **4. Middleware (Plugins)**
+```kotlin
+fun Application.installPlugins() {
+    install(ContentNegotiation) {
+        json()
+    }
+    
+    install(StatusPages) {
+        exception<MissingRequestParameterException> { call, cause ->
+            call.respond(HttpStatusCode.BadRequest, "400: ${cause.message}")
+        }
+    }
+}
+```
+
+
+
+## **5. Singleton Mock Database**
+```kotlin
+object MockDatabase {
+    private val data = mutableMapOf<String, String>()
+
+    fun insert(key: String, value: String) { data[key] = value }
+    fun get(key: String): String? = data[key]
+    fun delete(key: String) { data.remove(key) }
+    fun clear() { data.clear() }
+}
+```
+
+**Usage:**
+```kotlin
+MockDatabase.insert("user1", "Alice")
+println(MockDatabase.get("user1")) // Alice
+MockDatabase.delete("user1")
+```
+
+
+
+## **6. JWT Authentication**
+### **Generating a JWT**
+```kotlin
+fun generateJWT(userId: String): String {
+    val secretKey = "my-secret-key"
+    return Jwts.builder()
+        .setSubject(userId)
+        .setIssuedAt(Date())
+        .setExpiration(Date(System.currentTimeMillis() + 3600000)) // 1 hour
+        .signWith(Keys.hmacShaKeyFor(secretKey.toByteArray()), SignatureAlgorithm.HS256)
+        .compact()
+}
+```
+
+### **Validating a JWT**
+```kotlin
+fun validateJWT(jwt: String): String {
+    val secretKey = "my-secret-key"
+    return Jwts.parserBuilder()
+        .setSigningKey(secretKey.toByteArray())
+        .build()
+        .parseClaimsJws(jwt)
+        .body
+        .subject
+}
+```
+
+
+
+## **7. Hashing with SHA-256**
+```kotlin
+fun hashSHA256(input: String): String {
+    val bytes = MessageDigest.getInstance("SHA-256").digest(input.toByteArray())
+    return bytes.joinToString("") { "%02x".format(it) }
+}
+```
+
+**Usage:**
+```kotlin
+val hashed = hashSHA256("password123")
+println(hashed) // Prints hashed value
+```
+
+
+
+## **8. Mocking with `coEvery` for Unit Tests**
+Using **MockK** to mock service calls:
+```kotlin
+@Test
+fun `given fraud score found when GET scores then respond OK`() = runTestApplication {
+    coEvery { fraudScoreService.getFraudScore(any()) } returns FraudScore(100)
+
+    val response = client.get("/api/scores") {
+        url { parameters.append("email", "test@example.com") }
+    }
+
+    response.status shouldBe HttpStatusCode.OK
+}
+```
+
+
+
+## **9. Controller Handler**
+```kotlin
+val healthController: suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> Unit = {
+    delay(200)
+    call.respond(HttpStatusCode.OK, HealthResponse(number = Math.PI))
+}
+```
+
+**Usage in Routes:**
+```kotlin
+get("/health/liveness", healthController)
+```
+
+
+
+## **10. Handling JSON Responses**
+```kotlin
+data class ApiResponse(val message: String)
+
+get("/json") {
+    call.respond(HttpStatusCode.OK, ApiResponse("Hello, JSON!"))
+}
+```
+
+
+
+## **11. Handling Enums (`RiskGroup`)**
+```kotlin
+enum class RiskGroup { A, B, C, D, E, F }
+
+val riskGroup = RiskGroup.values()[fraudScore.value] // Convert ordinal to Enum
+```
+
+
+## **Conclusion**
+This **Kotlin Ktor Cheat Sheet** provides a quick reference for setting up Ktor, defining routes, handling authentication, hashing data, testing, and working with singleton databases. 🚀
+```
