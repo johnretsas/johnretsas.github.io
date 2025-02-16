@@ -1,0 +1,218 @@
+---
+title: Go (Golang) Cheat Sheet
+publishedAt: "2025-02-16"
+tags: Go, Golang, Concurrency, Pointers, Slices, Functions
+summary: A comprehensive Go (Golang) cheat sheet covering syntax, functions, pointers, slices, concurrency, and more.
+---
+
+# **Go (Golang) Cheat Sheet** 🚀
+
+A quick reference guide for working with Go.
+
+## **1. Basic Structure**
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, Go!")
+}
+```
+
+- **Compile & Run**: `go run main.go`
+- **Build Executable**: `go build main.go`
+- **Initialize Module**: `go mod init module-name`
+
+---
+
+## **2. Variables & Constants**
+
+```go
+var x int = 10  // Explicit type declaration
+y := 20         // Short declaration (only inside functions)
+const PI = 3.14 // Constant
+```
+
+---
+
+## **3. Data Types**
+
+- **Basic Types**: `int`, `float64`, `string`, `bool`
+- **Composite Types**: `array`, `slice`, `map`, `struct`
+- **Pointer**: `*T` (pointer to `T`)
+
+---
+
+## **4. Control Structures**
+
+```go
+if x > 10 {
+    fmt.Println("Big")
+} else {
+    fmt.Println("Small")
+}
+
+for i := 0; i < 5; i++ {
+    fmt.Println(i)
+}
+
+switch x {
+case 1:
+    fmt.Println("One")
+default:
+    fmt.Println("Other")
+}
+```
+
+---
+
+## **5. Functions**
+
+```go
+func add(a int, b int) int {
+    return a + b
+}
+
+func swap(x, y string) (string, string) {
+    return y, x
+}
+```
+
+---
+
+## **6. Pointers (`*` and `&` Usage)**
+
+### **Understanding `*` (Pointer Dereference) and `&` (Address-of)**
+
+```go
+x := 10
+p := &x  // `p` stores the address of `x`
+fmt.Println(p)  // Outputs memory address
+fmt.Println(*p) // Dereferences `p`, prints value of `x`
+
+*p = 20 // Modifies value at pointer's address
+fmt.Println(x) // Outputs 20
+```
+
+### **Passing Pointers to Functions**
+
+```go
+func changeValue(ptr *int) {
+    *ptr = 100
+}
+
+func main() {
+    num := 10
+    changeValue(&num) // Pass by reference
+    fmt.Println(num)  // Outputs 100
+}
+```
+
+---
+
+## **7. Structs & Methods**
+
+```go
+type Person struct {
+    Name string
+    Age  int
+}
+
+// Method with receiver
+func (p Person) Greet() {
+    fmt.Println("Hello, my name is", p.Name)
+}
+
+p := Person{"Alice", 25}
+p.Greet()
+```
+
+---
+
+## **8. Arrays vs Slices**
+
+### **Arrays (Fixed Size)**
+
+```go
+var arr = [3]int{1, 2, 3} // Fixed size
+arr[1] = 10               // Modify element
+fmt.Println(arr)          // [1 10 3]
+```
+
+### **Slices (Dynamic Size)**
+
+```go
+slice := []int{1, 2, 3}  // Dynamic size
+slice = append(slice, 4) // Add element
+fmt.Println(slice)       // [1 2 3 4]
+```
+
+---
+
+## **9. Maps**
+
+```go
+m := map[string]int{"Alice": 25, "Bob": 30}
+fmt.Println(m["Alice"]) // Access value
+delete(m, "Alice")      // Delete key
+```
+
+---
+
+## **10. Goroutines (Concurrency)**
+
+```go
+go func() {
+    fmt.Println("Goroutine")
+}()
+```
+
+---
+
+## **11. Channels**
+
+```go
+ch := make(chan int)
+go func() { ch <- 42 }()
+fmt.Println(<-ch)
+```
+
+---
+
+## **12. Error Handling**
+
+```go
+func divide(a, b int) (int, error) {
+    if b == 0 {
+        return 0, fmt.Errorf("cannot divide by zero")
+    }
+    return a / b, nil
+}
+```
+
+---
+
+## **13. Interfaces**
+
+```go
+type Speaker interface {
+    Speak()
+}
+
+type Dog struct{}
+
+func (d Dog) Speak() {
+    fmt.Println("Woof!")
+}
+
+var s Speaker = Dog{}
+s.Speak()
+```
+
+---
+
+## **Conclusion**
+
+This **Go (Golang) Cheat Sheet** provides a quick reference for setting up Go programs, handling pointers, slices, structs, concurrency, and more. 🚀
