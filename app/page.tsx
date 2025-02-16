@@ -11,8 +11,11 @@ export default function Page() {
           Senior Full Stack Web Software Engineer 💻
         </strong>{" "}
         based in the UK 🇬🇧 with{" "}
-        <strong className={styles.warmText}>7 years of experience</strong> 🏆,
-        specializing in crafting high-performance, scalable web applications 🚀.
+        <strong className={styles.warmText}>
+          more than 7 years of experience
+        </strong>{" "}
+        🏆, specializing in crafting high-performance, scalable web applications
+        🚀.
         <br />
         <br />I hold a{" "}
         <strong className={styles.warmText}>
