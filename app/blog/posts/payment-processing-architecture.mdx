@@ -1,58 +1,71 @@
 ---
-title: Payment Processing Architecture - SOLID Principles & Scalable PSP Integration
-publishedAt: "2025-02-21"
-tags: Laravel, SOLID, Dependency Injection, Payments, Stripe, PinPayments
-author: Your Name
-summary: A deep dive into building a scalable, PSP-agnostic payment processing system in Laravel using SOLID principles, Dependency Injection, and Mockery for testing.
+**Title**: Payment Processing Architecture - SOLID Principles & Scalable PSP Integration  
+**PublishedAt**: "2025-02-21"  
+**Tags**: Laravel, SOLID, Dependency Injection, Payments, Stripe, PinPayments  
+**Author**: Your Name  
+**Summary**: A high-level overview of building a scalable, PSP-agnostic payment processing system in Laravel using SOLID principles, Dependency Injection, and Singleton pattern for service management.
 ---
 
 ## **Overview**
 
-This application is designed to **handle payment processing for merchants** using multiple Payment Service Providers (PSPs), such as **Stripe** and **PinPayments**. The system is built with a **modular, scalable, and testable** architecture that follows **SOLID principles**, enabling easy expansion to support new PSPs.
+This application is designed to manage **payment processing for merchants** using various Payment Service Providers (PSPs), such as **Stripe** and **PinPayments**. The system follows a **modular, scalable, and testable architecture** that adheres to **SOLID principles**, making it easy to add new PSPs in the future.
 
 ## **Key Architectural Principles**
 
 ### **1. PSP-Agnostic Payment Processing (Dependency Inversion - "D" in SOLID)**
 
-- The application uses a **PaymentServiceInterface** that standardizes interactions across different PSPs.
-- PSP-specific implementations (`StripePaymentService`, `PinPaymentService`) ensure **loose coupling** between the controller and payment logic.
-- This approach allows new PSPs to be integrated with minimal modifications.
+- The application employs a **PaymentServiceInterface** to standardize the interactions between the system and multiple PSPs.
+- The payment processing logic for each PSP (e.g., **StripePaymentService** and **PinPaymentService**) is encapsulated in separate classes, which **decouple** the payment logic from the rest of the system.
+- This approach allows us to easily add more PSPs by implementing the interface and updating the service factory.
 
-### **2. Service Factory for PSP Resolution (Factory Pattern)**
+### **2. Using Singletons for PSP Services (Singleton Pattern)**
 
-- The `MerchantsPaymentsService` class acts as a **factory** to return the correct PSP service dynamically:
+- Instead of creating new instances of PSP services (such as `new StripePaymentService()`), the system utilizes **singletons** to manage PSP services. This ensures that each PSP service is instantiated only once and reused across the application.
+  
+  The `MerchantsPaymentsService` class serves as the **service factory** to retrieve the correct PSP service instance:
 
   ```php
   class MerchantsPaymentsService
   {
       public function getService(string $psp): PaymentServiceInterface
-      {
-          return match ($psp) {
-              'stripe' => new StripePaymentService('sk_test_default', 'pk_test_default'),
-              'pinpayments' => new PinPaymentService('pin_test_default', 'pin_test_default'),
-              default => throw new \Exception("Payment service provider {$psp} is not supported."),
-          };
-      }
+    {
+        if ($psp === 'stripe') {
+            return StripePaymentService::getInstance('pk_test_default', 'sk_test_default');
+        }
+
+        if ($psp === 'pin') {
+            return PinPaymentService::getInstance('pk_test_default', 'sk_test_default');
+        }
+
+        // Throw an exception if the PSP is not supported
+        throw new \Exception("Payment service provider {$psp} is not supported.");
+    }
   }
   ```
 
-- This ensures PSP selection is **abstracted from the controller**, improving maintainability.
+- This approach makes the system more efficient and ensures that the payment service is only instantiated once per request cycle.
 
 ### **3. IoC Container & Dependency Injection**
 
-- Laravel’s **Service Container** is leveraged to **bind dependencies at runtime**:
+- Laravel's **Service Container** is used to manage and inject dependencies. The **singleton pattern** is applied here as well, where the PSP services are **bound** in the container so that they are shared throughout the application's lifecycle:
 
   ```php
-  $this->app->singleton(MerchantsPaymentsService::class, function ($app) {
-      return new MerchantsPaymentsService();
+  $this->app->singleton(StripePaymentService::class, function ($app) {
+      return new StripePaymentService('sk_test_default', 'pk_test_default');
+  });
+
+  $this->app->singleton(PinPaymentService::class, function ($app) {
+      return new PinPaymentService('pin_test_default', 'pin_test_default');
   });
   ```
 
-- The `PaymentController` injects `MerchantsPaymentsService`, ensuring **dependencies are resolved dynamically**.
+- This allows the `PaymentController` to **inject the PSP service** dynamically using Laravel’s dependency injection system, ensuring that dependencies are resolved automatically.
 
 ### **4. Unit Testing with Mocking (Mockery & PestPHP)**
 
-- **Mockery** is used to **mock external dependencies** like `StripePaymentService`, preventing real API calls:
+- To ensure that the tests are fast and isolated from external services, **Mockery** is used to **mock** external dependencies like the payment services. This eliminates the need for real API calls during testing.
+
+  For instance, the `StripePaymentService` can be mocked as follows:
 
   ```php
   $mockService = \Mockery::mock(StripePaymentService::class);
@@ -60,11 +73,11 @@ This application is designed to **handle payment processing for merchants** usin
   app()->instance(StripePaymentService::class, $mockService);
   ```
 
-- This ensures tests are **isolated, fast, and do not rely on third-party services**.
+- This guarantees that the tests remain **independent** of external APIs and are **efficient**.
 
 ### **5. Error Handling & Logging**
 
-- **Robust error handling** ensures the system gracefully logs issues instead of crashing:
+- A robust error-handling mechanism is in place to ensure that the system gracefully handles failures. Errors are logged using Laravel’s built-in logging features, providing insight into issues without interrupting the flow of the application:
 
   ```php
   catch (\Exception $e) {
@@ -74,35 +87,28 @@ This application is designed to **handle payment processing for merchants** usin
 
 ## **Payment Flow Execution (High-Level Process)**
 
-1. **Merchant Configuration**
+1. **Merchant Configuration**  
+   Merchants specify their `active_psp` (e.g., `stripe` or `pinpayments`) and configure their API keys in the database.
 
-   - Merchants define their `active_psp` (e.g., `stripe` or `pinpayments`).
-   - API keys are stored securely in the database.
+2. **User Payment Request**  
+   Users initiate a payment by sending a request to charge a card (`POST /api/merchants/{merchantId}/charge`). The request is validated using Laravel's built-in validation tools.
 
-2. **User Payment Request**
+3. **PSP Selection & Processing**  
+   The `PaymentController` utilizes the `MerchantsPaymentsService` to dynamically select the correct PSP based on the merchant’s configuration and processes the payment.
 
-   - Users send a request to charge a card (`POST /api/merchants/{merchantId}/charge`).
-   - The request undergoes **validation** using Laravel’s Form Request Validation.
-
-3. **PSP Selection & Processing**
-
-   - The `PaymentController` **resolves the correct PSP** via `MerchantsPaymentsService`.
-   - The selected PSP processes the transaction.
-
-4. **Response Handling**
-   - If successful, the **payment intent ID is returned**.
-   - If an error occurs (e.g., invalid API key), the error is **logged and returned**.
+4. **Response Handling**  
+   If the payment is successful, the payment intent ID is returned. In case of failure (e.g., invalid API key), the error is logged and an appropriate message is returned to the user.
 
 ## **Key Technologies & Frameworks**
 
 - **Laravel 10** - Backend framework
 - **Stripe API / PinPayments API** - Payment processing
-- **SOLID Principles** - Clean architecture, DIP, SRP
-- **Factory Pattern** - PSP service resolution
+- **SOLID Principles** - Clean architecture, Dependency Inversion Principle (DIP), Single Responsibility Principle (SRP)
+- **Singleton Pattern** - Efficient service resolution
 - **Dependency Injection & IoC** - Laravel's service container
-- **Mockery & PestPHP** - Unit testing
+- **Mockery & PestPHP** - Unit testing and mocking
 - **Logging & Exception Handling** - Error resilience
 
 ## **Conclusion**
 
-This architecture **ensures modularity, extensibility, and maintainability** while keeping the payment processing logic **agnostic to any specific PSP**. New PSPs can be added seamlessly by implementing `PaymentServiceInterface` and updating `MerchantsPaymentsService`. The use of **Dependency Injection, Factory Patterns, and Mocking in tests** makes the system **robust, scalable, and easy to maintain**. 🚀
+This architecture provides **modularity, extensibility, and maintainability** while ensuring that the payment logic remains **agnostic** to any specific PSP. New PSPs can be integrated seamlessly by implementing the `PaymentServiceInterface` and updating the service factory. By leveraging **Dependency Injection**, **Singletons**, and **Mocking**, the system is **robust, scalable, and easy to maintain**. This approach also ensures that the application can evolve to support additional PSPs with minimal changes to existing code. 🚀
