@@ -1,31 +1,33 @@
 ---
-**Title**: Understanding High p99 Latency in Go Backend Systems & How to Fix It  
-**PublishedAt**: "2025-02-26"  
-**Tags**: Go, System Design, Performance Optimization, p99 Latency, Backend Scaling  
-**Summary**: A deep dive into why a Go-based backend system can have low average latency but high p99 latency, with real-world examples, architectural patterns, and optimization techniques.
+title: Understanding High p99 Latency in Go Backend Systems & How to Fix It
+publishedAt: "2025-02-26"
+tags: Go, System Design, Performance Optimization, p99 Latency, Backend Scaling
+summary: A deep dive into why a Go-based backend system can have low average latency but high p99 latency, with real-world examples, architectural patterns, and optimization techniques.
 ---
 
 ## **Overview**
 
 A system can have **low average latency** but **high p99 latency** when a small percentage of requests experience extreme delays. This happens due to **sporadic bottlenecks**, which are not visible when looking at average response times.
 
-### **Example Scenario (Go Backend for Food Delivery App)**  
-- **p50 (median) latency**: **200ms** (half of requests are super fast).  
-- **p90 latency**: **400ms** (most users have a good experience).  
-- **p99 latency**: **4 seconds** (1% of users get stuck waiting).  
-- **Mean (average) latency**: **250ms**, which looks fine **but hides the bad experiences**.  
+### **Example Scenario (Go Backend for Food Delivery App)**
 
-✅ **Takeaway:** If your food order takes 4 seconds when everyone else gets it in 200ms, it feels **slow**, even if the system looks “fast” on average.
+- **p50 (median) latency**: **200ms** (half of requests are super fast).
+- **p90 latency**: **400ms** (most users have a good experience).
+- **p99 latency**: **4 seconds** (1% of users get stuck waiting).
+- **Mean (average) latency**: **250ms**, which looks fine **but hides the bad experiences**.
 
----
+  ✅ **Takeaway:** If your food order takes 4 seconds when everyone else gets it in 200ms, it feels **slow**, even if the system looks “fast” on average.
 
 ## **4 Most Common Causes of High p99 Latency (Go-Specific)**
 
 ### **1. Garbage Collection (GC) Pauses in Go**
-#### **Issue:**  
+
+#### **Issue:**
+
 Go uses **garbage collection (GC)** to manage memory, and while Go’s GC is **low-pause**, it can still **cause p99 spikes** if heap allocations get excessive.
 
 #### **Example (Go Web Server With High GC Delays)**
+
 ```go
 package main
 
@@ -47,6 +49,7 @@ func main() {
 ```
 
 #### **Solution: Reduce Heap Allocations & Use Object Pools**
+
 ```go
 package main
 
@@ -73,17 +76,20 @@ func main() {
 }
 ```
 
-✅ **Fix:**
-- Uses **sync.Pool** to **reuse memory**, reducing GC overhead.  
-- Prevents p99 spikes by minimizing new heap allocations.  
+    ✅ **Fix:**
 
----
+- Uses **sync.Pool** to **reuse memory**, reducing GC overhead.
+
+- Prevents p99 spikes by minimizing new heap allocations.
 
 ### **2. Slow Database Queries (Go + PostgreSQL)**
-#### **Issue:**  
+
+#### **Issue:**
+
 A poorly optimized query **causes slow p99 responses** while most queries are fast.
 
 #### **Example (Inefficient Query in a Go Service)**
+
 ```go
 package main
 
@@ -117,6 +123,7 @@ func main() {
 ```
 
 #### **Solution: Add an Index + Caching**
+
 ```sql
 CREATE INDEX idx_orders_status ON orders(status);
 ```
@@ -125,17 +132,18 @@ CREATE INDEX idx_orders_status ON orders(status);
 rows, err := db.Query("SELECT * FROM orders WHERE status = 'pending' LIMIT 100")
 ```
 
-✅ **Fix:**
-- **Indexing + LIMIT** speeds up queries.  
-- **Redis cache** reduces DB load and p99 spikes.  
-
----
+    ✅ **Fix:**
+    - **Indexing + LIMIT** speeds up queries.
+    - **Redis cache** reduces DB load and p99 spikes.
 
 ### **3. Thread Contention & Queueing Delays (Goroutines)**
-#### **Issue:**  
+
+#### **Issue:**
+
 Too many requests pile up, exceeding Go’s worker thread capacity.
 
 #### **Example (Too Many Goroutines Causing p99 Spikes)**
+
 ```go
 func handler(w http.ResponseWriter, r *http.Request) {
 	go expensiveOperation() // Launch goroutine for each request
@@ -144,6 +152,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 ```
 
 #### **Solution: Use a Worker Pool**
+
 ```go
 var jobs = make(chan string, 100)
 
@@ -172,16 +181,19 @@ func main() {
 ```
 
 ✅ **Fix:**
-- Uses **bounded goroutines** (worker pool).  
-- **Rejects excess requests instead of queueing forever** (rate limiting).  
 
----
+- Uses **bounded goroutines** (worker pool).
+- **Rejects excess requests instead of queueing forever** (rate limiting).
+
 
 ### **4. Network Spikes & Slow Dependencies**
-#### **Issue:**  
+
+#### **Issue:**
+
 A slow **external API** increases p99 latency.
 
 #### **Solution: Use Circuit Breaker (Resilience in Go)**
+
 ```go
 import (
 	"github.com/sony/gobreaker"
@@ -205,13 +217,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
 ```
 
 ✅ **Fix:**
-- **Circuit breaker** prevents cascading failures.  
-- **Timeouts ensure requests don’t wait indefinitely**.  
 
----
+- **Circuit breaker** prevents cascading failures.
+- **Timeouts ensure requests don’t wait indefinitely**.
 
 ## **Key Takeaways**
-1. **Go GC tuning, object pools, and reducing heap allocations help prevent p99 spikes.**  
-2. **Slow queries can be fixed with indexing, caching, and efficient database queries.**  
-3. **Goroutine explosion must be controlled with worker pools and rate limiting.**  
-4. **External dependencies should use circuit breakers and timeouts to prevent long delays.**  
+
+1. **Go GC tuning, object pools, and reducing heap allocations help prevent p99 spikes.**
+2. **Slow queries can be fixed with indexing, caching, and efficient database queries.**
+3. **Goroutine explosion must be controlled with worker pools and rate limiting.**
+4. **External dependencies should use circuit breakers and timeouts to prevent long delays.**
