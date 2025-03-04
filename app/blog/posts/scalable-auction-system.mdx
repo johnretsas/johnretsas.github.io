@@ -1,0 +1,154 @@
+---
+title: Building a Scalable Auction System with AWS Lambda and DynamoDB
+publishedAt: "2024-03-04"
+tags: AWS, Lambda, DynamoDB, SQS, Serverless, Auction
+summary: Learn how to design a scalable auction processing system using AWS Lambda, DynamoDB, and SQS, optimizing bid processing to ensure only the highest bid for each car is recorded and processed efficiently.
+---
+
+## Overview
+
+### The Auction Processing Challenge
+
+Imagine you're building a car auction platform where users place bids between **10 AM and 3 PM**. At **3 PM**, the system needs to process all bids and determine the highest bid for each car. If the highest bid meets or exceeds the **reserve price**, the car is marked as **sold**. Otherwise, it is **relisted** for the next auction.
+
+To handle large volumes of bids efficiently, we need a system that can:
+
+- Scale to process thousands of bids.
+- Ensure only the highest bid for each car is processed.
+- Prevent a single Lambda function from timing out.
+
+## System Architecture
+
+The solution consists of three key AWS components:
+
+1. **Trigger Lambda** – Queries DynamoDB for all bids placed that day and sends them to an **SQS queue**.
+2. **SQS Queue** – Buffers messages, allowing parallel processing by multiple worker Lambdas.
+3. **Worker Lambda** – Processes each bid, determines if it exceeds the reserve price, and updates the **Car Database**.
+
+## Step 1: Trigger Lambda
+
+At **3 PM**, the Trigger Lambda is executed, fetching all bids from the **Car Bids Table** and sending them to the **SQS queue** in batches.
+
+### Key Features:
+- Queries DynamoDB for all bids between **10 AM and 3 PM**.
+- Sorts bids by **amount (descending order)**.
+- Sends the highest bid for each car to **SQS**.
+
+### Code Example:
+
+```python
+import boto3
+import json
+from datetime import datetime
+
+dynamodb = boto3.client('dynamodb')
+sqs = boto3.client('sqs')
+
+queue_url = 'YOUR_SQS_QUEUE_URL'
+
+def lambda_handler(event, context):
+    today = datetime.now().strftime('%Y-%m-%d')
+    response = dynamodb.query(
+        TableName='CarBidsTable',
+        KeyConditionExpression='bidTimestamp BETWEEN :startTime AND :endTime',
+        ExpressionAttributeValues={
+            ':startTime': {'S': f'{today}T10:00:00'},
+            ':endTime': {'S': f'{today}T15:00:00'}
+        }
+    )
+    
+    bids = response.get('Items', [])
+    highest_bids_map = {}
+    
+    for bid in bids:
+        car_id = bid['carId']['S']
+        bid_amount = float(bid['bidAmount']['N'])
+        
+        if car_id not in highest_bids_map or bid_amount > highest_bids_map[car_id]:
+            highest_bids_map[car_id] = bid_amount
+    
+    for car_id, highest_bid in highest_bids_map.items():
+        message = {
+            'carId': car_id,
+            'bidAmount': highest_bid
+        }
+        sqs.send_message(
+            QueueUrl=queue_url,
+            MessageBody=json.dumps(message)
+        )
+    
+    return {'statusCode': 200, 'body': f'{len(highest_bids_map)} bids sent to SQS.'}
+```
+
+## Step 2: SQS Queue
+
+The **SQS queue** acts as a buffer, ensuring that the **Worker Lambda** can process bids asynchronously and at scale. Since SQS allows multiple workers to process messages in parallel, it prevents the system from overloading.
+
+## Step 3: Worker Lambda
+
+The **Worker Lambda** processes messages from SQS and updates the **Car Database**.
+
+### Steps:
+1. Reads the **highest bid** for a car from SQS.
+2. Fetches the **car’s reserve price** from the **Car Database**.
+3. If the bid is **above the reserve price**, marks the car as **sold**.
+4. If the bid is **below the reserve price**, leaves the car for the next auction.
+
+### Code Example:
+
+```python
+import boto3
+import json
+
+dynamodb = boto3.client('dynamodb')
+
+car_table = 'CarDatabase'
+
+def lambda_handler(event, context):
+    for record in event['Records']:
+        message = json.loads(record['body'])
+        car_id = message['carId']
+        highest_bid = float(message['bidAmount'])
+        
+        response = dynamodb.get_item(TableName=car_table, Key={'carId': {'S': car_id}})
+        car = response.get('Item')
+        reserve_price = float(car['reservePrice']['N'])
+        
+        if highest_bid >= reserve_price:
+            dynamodb.update_item(
+                TableName=car_table,
+                Key={'carId': {'S': car_id}},
+                UpdateExpression='SET reservePriceCovered = :true',
+                ExpressionAttributeValues={':true': {'BOOL': True}}
+            )
+    
+    return {'statusCode': 200, 'body': 'Processing complete.'}
+```
+
+## Optimizing Bid Selection in Trigger Lambda
+
+By default, the **Trigger Lambda** sends all bids to SQS, but we can optimize this further:
+
+### Problem:
+- Without filtering, multiple bids for the same car may be sent to SQS, leading to redundant processing.
+
+### Solution:
+- The **Trigger Lambda** maintains a dictionary of the highest bid per car.
+- It only sends **one bid per car** to SQS, reducing queue load and speeding up processing.
+
+### Benefits:
+- **Reduces SQS processing time** by filtering lower bids.
+- **Prevents redundant work** in Worker Lambda.
+- **Optimizes cost** by minimizing unnecessary Lambda executions.
+
+## Conclusion
+
+This architecture ensures that our auction system can handle large numbers of bids efficiently. By leveraging **AWS Lambda, DynamoDB, and SQS**, we achieve a **scalable, serverless auction processing system** that optimizes performance and minimizes redundant processing.
+
+### Key Takeaways:
+- Use **DynamoDB + SQS + Lambda** for scalable bid processing.
+- **Trigger Lambda** fetches bids, selects only the highest per car, and sends them to SQS.
+- **Worker Lambda** processes bids and updates the **Car Database**.
+- Optimizing the **Trigger Lambda** reduces redundant processing and saves costs.
+
+This approach can be applied to **any auction-style system** requiring efficient real-time bid processing. 🚀
