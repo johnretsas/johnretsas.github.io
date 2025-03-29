@@ -1,0 +1,87 @@
+---
+title: NPM package - find-circular
+publishedAt: "2025-03-29"
+tags: TypeScript, API
+author: John Retsas
+summary: A utility to detect and handle circular references in objects.
+---
+
+# Detecting Circular References in JavaScript Objects with `find-circular`
+
+When working with JavaScript objects, dealing with circular references can be a tricky and frustrating challenge. Circular references occur when an object references itself directly or indirectly, leading to infinite loops or errors when trying to serialize the object with `JSON.stringify`. Fortunately, the `find-circular` npm package offers a simple and effective way to detect and handle circular references in objects.
+
+## Why Circular References Matter
+
+Circular references can cause issues when you attempt to serialize objects into JSON, a common operation in web development. For example:
+
+```javascript
+const obj = { a: 1 };
+obj.self = obj;
+
+JSON.stringify(obj);
+// Throws a TypeError: Converting circular structure to JSON
+```
+
+The error above happens because `JSON.stringify` doesn't know how to handle the circular reference (`obj.self` pointing back to `obj`). This is where `find-circular` shines – it identifies these circular references and replaces them with a placeholder (`"[Circular]"`), preventing errors and making the object safe for serialization.
+
+## Introducing `find-circular`
+
+`find-circular` is a lightweight utility designed to detect and handle circular references in JavaScript objects. It’s easy to install and use, making it a go-to solution for debugging or cleaning objects with potential circular references.
+
+## Installation
+
+To get started, install the package using npm:
+
+```bash
+npm install find-circular
+```
+
+## How to Use `find-circular`
+
+Here’s a quick example to demonstrate how `find-circular` works:
+
+```javascript
+import { findCircular } from "find-circular";
+
+// Create an object with a circular reference
+const obj = { a: 1 };
+obj.self = obj;
+
+// Detect and handle the circular reference
+console.log(findCircular(obj));
+// Output: { a: 1, self: "[Circular]" }
+```
+
+### What’s Happening Here?
+
+The `findCircular` function traverses the object and detects any references that point back to an earlier object in the traversal chain. When it finds a circular reference, it replaces it with the string `"[Circular]"`.
+
+## Use Cases for `find-circular`
+
+### 1. Debugging Complex Data Structures
+
+When dealing with deeply nested or dynamic objects, `find-circular` helps uncover circular references that might otherwise go unnoticed.
+
+### 2. Safe Serialization
+
+If you need to serialize objects for APIs, logging, or storage, `find-circular` ensures circular references won’t cause your application to crash.
+
+### 3. Object Inspection
+
+Developers can use `find-circular` to inspect objects safely in debugging tools or during runtime.
+
+## Source Code and Contributions
+
+The `find-circular` package is open-source and welcomes contributions! You can explore the source code or raise issues on the [GitHub repository](#). Whether you’re looking to add new features, report bugs, or improve documentation, your input is valued.
+
+## Why Use `find-circular`?
+
+- **Simplicity:** A lightweight utility that gets the job done with minimal setup.
+- **Reliability:** Handles circular references gracefully, ensuring your objects remain usable.
+- **Open Source:** Actively maintained with opportunities to contribute and collaborate.
+
+## Final Thoughts
+
+Managing circular references doesn’t have to be a headache. With `find-circular`, you can quickly identify and handle problematic references, making your objects safe for serialization and inspection. Give it a try in your next project and simplify how you handle complex JavaScript objects.
+
+To learn more, check out the [GitHub repository](#) and start detecting circular references today! 🚀
