@@ -1,11 +1,11 @@
 ---
-title: Handling Many Connected Users: How Apps Scale
+title: How Many Open Connections Can An Application Have?
 publishedAt: "2025-03-04"
 tags: Scaling, WebSockets, Load Balancing, Horizontal Scaling, Chat Apps, AWS
 summary: Building apps that need to maintain constant connections with many users (like chat or real-time games) requires careful planning. This article explains how a single server has limitations on the number of simultaneous connections it can handle due to operating system constraints (like file descriptors). It then details how techniques like load balancing (distributing connections across multiple servers) and horizontal scaling (adding more servers) are used to overcome these limits and support millions of concurrent users.
 ---
 
-# Handling Many Connected Users: How Apps Scale
+# How Many Open Connections Can An Application Have?
 
 Building applications that require persistent connections with a large number of users, such as chat platforms or real-time multiplayer games, presents significant scaling challenges. A single server has inherent limitations in the number of simultaneous connections it can manage. This article delves into these limitations and explores the architectural patterns used to overcome them, enabling applications to support millions of concurrent users.
 
