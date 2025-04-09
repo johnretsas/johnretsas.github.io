@@ -1,194 +1,57 @@
 ---
-title: How Many Open Connections Can an App Have?
+title: Handling Many Connected Users: How Apps Scale
 publishedAt: "2025-03-04"
 tags: Scaling, WebSockets, Load Balancing, Horizontal Scaling, Chat Apps, AWS
-summary: Learn about file descriptor limits, load balancers, and horizontal scaling to support millions of concurrent connections in real-time chat applications.
+summary: Building apps that need to maintain constant connections with many users (like chat or real-time games) requires careful planning. This article explains how a single server has limitations on the number of simultaneous connections it can handle due to operating system constraints (like file descriptors). It then details how techniques like load balancing (distributing connections across multiple servers) and horizontal scaling (adding more servers) are used to overcome these limits and support millions of concurrent users.
 ---
 
-# **How Many Open Connections Can an App Have?**
+# Handling Many Connected Users: How Apps Scale
 
-Building large-scale applications such as chat servers, gaming platforms, or real-time collaboration tools presents a major challenge: **handling millions of concurrent connections efficiently**. Every connection consumes system resources, and at a certain point, a single server reaches its limit. This article explores:
+Building applications that require persistent connections with a large number of users, such as chat platforms or real-time multiplayer games, presents significant scaling challenges. A single server has inherent limitations in the number of simultaneous connections it can manage. This article delves into these limitations and explores the architectural patterns used to overcome them, enabling applications to support millions of concurrent users.
 
-- **How many open connections a server can handle**
-- **File descriptor limitations and OS constraints**
-- **Scaling using load balancers and horizontal scaling**
-- **How large-scale apps like WhatsApp or Discord manage millions of users**
+## 1. Connection Limits and Your Server
 
-## **1. Understanding Open Connections & System Limits**
+When your app has a user connected (especially with technologies like **WebSockets**), the server needs to keep track of that connection. The operating system does this using something called a **file descriptor (FD)**.
 
-When a server handles client connections (e.g., WebSockets, TCP, or HTTP keep-alive), each open connection **consumes a file descriptor** (FD). The OS uses file descriptors to track **open files, network sockets, and pipes**.
+Think of **FDs as tickets**: Each open connection gets a ticket. Your server has a maximum number of tickets it can hand out at once (the **file descriptor limit**).
 
-### **File Descriptor Limits**
+**Default Limits:** Operating systems often have low default limits (e.g., around 1000 connections). While these limits can be increased, the server's memory and processing power will eventually become bottlenecks.
 
-Operating systems impose a **maximum number of open file descriptors** per process:
-<table>
-    <thead>
-        <tr>
-            <th>OS</th>
-            <th>Default Soft Limit (<code>ulimit -n</code>)</th>
-            <th>Hard Limit</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Linux</td>
-            <td>1024</td>
-            <td>65,535+ (with tuning)</td>
-        </tr>
-        <tr>
-            <td>macOS</td>
-            <td>256–1024</td>
-            <td>16,384 (modifiable)</td>
-        </tr>
-        <tr>
-            <td>Windows</td>
-            <td colspan="2">Uses <code>SOCKET</code> handles, different limits</td>
-        </tr>
-    </tbody>
-</table>
+## 2. Why Real-Time Apps Need Many Connections
 
-- **Soft Limit**: The default max number of open connections per process.
-- **Hard Limit**: The absolute max (can be increased by the admin).
+Unlike regular web browsing (short requests), real-time apps like chat keep connections open using protocols like **WebSockets**. This allows instant two-way communication.
 
-#### **Example: Connection Limits Per Server**
+This "always-on" nature means each connected user constantly occupies a file descriptor and consumes server resources.
 
-- If a chat server has a **1024-file descriptor limit**, it can handle **only 1024 active WebSocket connections**.
-- Increasing the limit (`ulimit -n 100000`) allows **100K+ connections** per server, but memory, CPU, and kernel settings also matter.
+## 3. Spreading the Load: Load Balancing
 
-### **How Many Users Can a Server Handle?**
+To handle more concurrent connections than a single server allows, you use a **load balancer**.
 
-Each WebSocket connection consumes **50KB–100KB of memory**. On a server with **16GB RAM**, assuming:
+Think of a **load balancer as a smart traffic director**: It sits in front of your servers and distributes incoming connection requests evenly across multiple backend servers. This prevents any single server from being overwhelmed.
 
-- 50KB per connection → **320K users max** before running out of memory.
-- 100KB per connection → **160K users max**.
+Load balancers can operate at different network layers (**Layer 4** for basic IP/port routing, **Layer 7** for more intelligent routing based on application data like WebSocket handshakes).
 
-Since a single server has limits, **horizontal scaling and load balancing are required** to support millions of connections.
+## 4. Adding More Power: Horizontal Scaling
 
+Even with load balancing, each individual server has its capacity limits. To scale to millions of users, you employ **horizontal scaling**.
 
-## **2. Why Chat Apps Require Many Open Connections**
+Think of **horizontal scaling as adding more identical servers**: When the existing servers start getting busy, you spin up more servers, and the load balancer automatically starts distributing new connections to them.
 
-Unlike traditional HTTP-based apps where connections are short-lived, chat apps **keep connections open indefinitely** using **WebSockets** or **TCP sockets**.
+## 5. Managing Data Flow: Databases and Message Queues
 
-### **Challenges in Managing Connections**
+Besides managing connections, real-time apps need to efficiently handle the flow of data (messages, events).
 
-1. **File Descriptor Exhaustion**: A single server has a limit on open sockets.
-2. **Memory & CPU Overhead**: Each connection consumes RAM and processing power.
-3. **Single Point of Failure**: If one server manages all connections, it becomes a bottleneck and a failure risk.
+**Databases** store persistent data like user accounts and message history. They need to be scalable to handle large volumes of data.
 
-### **Solution: Load Balancing & Horizontal Scaling**
+**Message Queues** (like **Kafka** or **Redis Pub/Sub**) are used for asynchronous communication between different parts of the system, ensuring reliable and real-time delivery of messages to connected clients across multiple servers.
 
-To overcome these challenges, **chat applications distribute load across multiple servers** using:
+## 6. How Big Players Scale
 
-- **Load balancers** to distribute WebSocket connections.
-- **Horizontal scaling** (adding more servers when traffic increases).
-- **Optimized OS settings** (`sysctl` tuning) for better connection handling.
+Large-scale applications like WhatsApp and Discord utilize these techniques extensively:
 
+- Running numerous server instances.
+- Employing sophisticated load balancing strategies.
+- Using scalable databases and message queues.
+- Often leveraging cloud infrastructure (like **AWS** or **GCP**) for dynamic scaling and global distribution.
 
-## **3. Using Load Balancers for Large-Scale WebSockets**
-
-A **load balancer** distributes incoming WebSocket or TCP connections across multiple backend servers. This ensures that:
-
-- No single server is overloaded.
-- Connections are evenly spread across available resources.
-- The system can scale dynamically by adding more servers.
-
-### **Types of Load Balancers**
-
-#### **1. TCP Load Balancers (Layer 4)**
-
-- Routes traffic based on IP/port.
-- Does not inspect HTTP/WebSocket headers.
-- Examples: **HAProxy, AWS NLB, Nginx (stream module)**.
-
-#### **2. HTTP Load Balancers (Layer 7)**
-
-- Routes traffic based on **WebSocket handshake (`ws://` or `wss://`)**.
-- Can terminate and re-establish WebSocket connections.
-- Examples: **Nginx (HTTP mode), AWS ALB, Traefik**.
-
-
-### **Example: Load Balancing WebSockets with Nginx**
-
-This example shows how **Nginx** can distribute WebSocket connections across multiple chat servers:
-
-```nginx
-http {
-    upstream websocket_servers {
-        server chatserver1:3000;
-        server chatserver2:3000;
-    }
-
-    server {
-        listen 80;
-
-        location /ws/ {
-            proxy_pass http://websocket_servers;
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection "Upgrade";
-        }
-    }
-}
-```
-
-- Incoming WebSocket connections (`/ws/`) are **routed to multiple backend servers**.
-- If one server is overwhelmed, **new connections are sent to another**.
-
-
-## **4. Horizontal Scaling for Millions of Connections**
-
-Even with load balancing, a single machine can still **only handle a finite number of connections**. **Horizontal scaling** helps by distributing traffic across multiple machines.
-
-### **How Horizontal Scaling Works**
-
-1. **Multiple chat servers** run WebSocket services.
-2. **Load balancers distribute incoming connections**.
-3. **More servers are added dynamically** when needed.
-
-
-## **5. Databases & Message Queues in Chat Apps**
-
-Besides handling connections, **messages must be stored and delivered efficiently**.
-
-### **Databases for Chat Apps**
-
-1. **Relational Databases (MySQL, PostgreSQL)** – Good for structured user data.
-2. **NoSQL Databases (MongoDB, Cassandra, DynamoDB)** – Scale better for chat message storage.
-
-### **Message Queues for Real-Time Delivery**
-
-To ensure **real-time message delivery**, chat apps use **message queues**:
-
-- **Kafka/RabbitMQ**: Handles real-time chat events.
-- **Redis Pub/Sub**: Synchronizes WebSocket servers.
-
-
-## **6. How WhatsApp & Discord Scale to Millions of Users**
-
-Apps like WhatsApp and Discord need to **scale globally** to support **millions of concurrent users**.
-
-### **WhatsApp (Erlang-Based Architecture)**
-
-- Uses **Erlang**, which handles **millions of lightweight threads efficiently**.
-- **Shards connections across data centers** to distribute the load.
-
-### **Discord (Massive WebSocket Scaling)**
-
-- Runs **thousands of WebSocket servers** across multiple data centers.
-- Uses **Redis & Kafka for real-time event processing**.
-- Deploys **AWS/GCP for auto-scaling WebSocket clusters**.
-
-
-## **7. Summary: Scaling Chat Apps for Millions of Users**
-
-✅ **File Descriptor Limits** – A single machine has an OS-enforced limit on open connections.  
-✅ **Load Balancers** – Distribute WebSocket connections across multiple backend servers.  
-✅ **Horizontal Scaling** – More servers = more connections handled.  
-✅ **Message Queues** – Synchronize messages across WebSocket servers (Redis, Kafka).  
-✅ **Database Scaling** – Store chat history efficiently using NoSQL or sharded databases.
-
-### **Final Thoughts**
-
-Handling **millions of concurrent users** requires **combining all these strategies**. **Load balancing, horizontal scaling, database optimization, and real-time synchronization** ensure that large-scale chat applications remain fast, reliable, and scalable.
-
-🚀 **If you're building a chat app, start with scalability in mind from Day 1!**
+**In essence:** To support a massive number of concurrent, persistent connections, modern applications don't rely on a single powerful server. Instead, they use a distributed architecture involving load balancers to spread the initial connection load and horizontal scaling to increase the overall capacity by adding more server instances. Efficient data management through scalable databases and message queues is also crucial for the real-time functionality of these applications.
