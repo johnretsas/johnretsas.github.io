@@ -23,12 +23,31 @@ When a server handles client connections (e.g., WebSockets, TCP, or HTTP keep-al
 ### **File Descriptor Limits**
 
 Operating systems impose a **maximum number of open file descriptors** per process:
-
-| OS      | Default Soft Limit (`ulimit -n`)        | Hard Limit            |
-| ------- | --------------------------------------- | --------------------- |
-| Linux   | 1024                                    | 65,535+ (with tuning) |
-| macOS   | 256–1024                                | 16,384 (modifiable)   |
-| Windows | Uses `SOCKET` handles, different limits |
+<table>
+    <thead>
+        <tr>
+            <th>OS</th>
+            <th>Default Soft Limit (<code>ulimit -n</code>)</th>
+            <th>Hard Limit</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Linux</td>
+            <td>1024</td>
+            <td>65,535+ (with tuning)</td>
+        </tr>
+        <tr>
+            <td>macOS</td>
+            <td>256–1024</td>
+            <td>16,384 (modifiable)</td>
+        </tr>
+        <tr>
+            <td>Windows</td>
+            <td colspan="2">Uses <code>SOCKET</code> handles, different limits</td>
+        </tr>
+    </tbody>
+</table>
 
 - **Soft Limit**: The default max number of open connections per process.
 - **Hard Limit**: The absolute max (can be increased by the admin).
@@ -47,7 +66,6 @@ Each WebSocket connection consumes **50KB–100KB of memory**. On a server with 
 
 Since a single server has limits, **horizontal scaling and load balancing are required** to support millions of connections.
 
----
 
 ## **2. Why Chat Apps Require Many Open Connections**
 
@@ -67,7 +85,6 @@ To overcome these challenges, **chat applications distribute load across multipl
 - **Horizontal scaling** (adding more servers when traffic increases).
 - **Optimized OS settings** (`sysctl` tuning) for better connection handling.
 
----
 
 ## **3. Using Load Balancers for Large-Scale WebSockets**
 
@@ -91,7 +108,6 @@ A **load balancer** distributes incoming WebSocket or TCP connections across mul
 - Can terminate and re-establish WebSocket connections.
 - Examples: **Nginx (HTTP mode), AWS ALB, Traefik**.
 
----
 
 ### **Example: Load Balancing WebSockets with Nginx**
 
@@ -120,7 +136,6 @@ http {
 - Incoming WebSocket connections (`/ws/`) are **routed to multiple backend servers**.
 - If one server is overwhelmed, **new connections are sent to another**.
 
----
 
 ## **4. Horizontal Scaling for Millions of Connections**
 
@@ -132,7 +147,6 @@ Even with load balancing, a single machine can still **only handle a finite numb
 2. **Load balancers distribute incoming connections**.
 3. **More servers are added dynamically** when needed.
 
----
 
 ## **5. Databases & Message Queues in Chat Apps**
 
@@ -150,7 +164,6 @@ To ensure **real-time message delivery**, chat apps use **message queues**:
 - **Kafka/RabbitMQ**: Handles real-time chat events.
 - **Redis Pub/Sub**: Synchronizes WebSocket servers.
 
----
 
 ## **6. How WhatsApp & Discord Scale to Millions of Users**
 
@@ -167,7 +180,6 @@ Apps like WhatsApp and Discord need to **scale globally** to support **millions 
 - Uses **Redis & Kafka for real-time event processing**.
 - Deploys **AWS/GCP for auto-scaling WebSocket clusters**.
 
----
 
 ## **7. Summary: Scaling Chat Apps for Millions of Users**
 
