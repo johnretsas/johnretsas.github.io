@@ -14,8 +14,6 @@ Building large-scale applications such as chat servers, gaming platforms, or rea
 - **Scaling using load balancers and horizontal scaling**
 - **How large-scale apps like WhatsApp or Discord manage millions of users**
 
----
-
 ## **1. Understanding Open Connections & System Limits**
 
 When a server handles client connections (e.g., WebSockets, TCP, or HTTP keep-alive), each open connection **consumes a file descriptor** (FD). The OS uses file descriptors to track **open files, network sockets, and pipes**.
