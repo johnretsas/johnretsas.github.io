@@ -6,8 +6,6 @@ summary: Learn how to rename a commit in a pull request using Git’s interactiv
 
 ---
 
-## Overview
-
 ### Renaming a Commit in a Pull Request (Conventional Commits Style)
 
 Clear and consistent commit messages make your Git history easier to understand, review, and automate. In many teams, developers follow the Conventional Commits convention, where commit messages follow a strict format like:
@@ -105,41 +103,7 @@ Make the message specific and Conventional Commit-compliant. Save and exit.
 git push origin your-branch-name --force
 ```
 
-> 🔄 This updates the remote branch used in your PR with the renamed commit.
-
-
-## 🎞️ Animated Terminal Demo
-
-Here’s a text-based animation of the full flow:
-
-```bash
-# Show commit history
-$ git log --oneline
-
-h7i8j9k docs(readme): update API usage
-d4e5f6g feat(ui): add spacing utility classes
-a1b2c3d fix(layout): correct mobile nav overflow
-
-# Start rebase
-$ git rebase -i HEAD~3
-
-# (Interactive editor opens)
-# Change:
-#   pick d4e5f6g feat(ui): add spacing utility classes
-# To:
-#   reword d4e5f6g feat(ui): add spacing utility classes
-
-# Save and close (:wq)
-
-# Prompted to edit commit message
-# Update it to:
-feat(ui): add utility classes for margin and padding
-
-# Save and close (:wq)
-
-# Push the updated history
-$ git push origin your-branch-name --force
-```
+> This updates the remote branch used in your PR with the renamed commit.
 
 ## Conclusion
 
