@@ -20,7 +20,7 @@ docs: update API usage examples
 
 If you've already pushed a commit and realize it needs renaming—for clarity, convention, or feedback—you can **rename it using interactive rebase**.
 
----
+
 
 ## Key Concepts
 
@@ -38,7 +38,7 @@ If you've already pushed a commit and realize it needs renaming—for clarity, c
   * `scope`: optional; e.g., `auth`, `api`, `ui`
   * `subject`: short, imperative sentence (no period)
 
----
+
 
 ## Step-by-Step: How to Rename a Commit
 
@@ -58,7 +58,7 @@ a1b2c3d fix(layout): correct mobile nav overflow
 
 Suppose we want to **rename** `feat(ui): add spacing utility classes`.
 
----
+
 
 ### 2. Start Interactive Rebase
 
@@ -68,7 +68,7 @@ Count how many commits back the target is. In this case, 2.
 git rebase -i HEAD~3
 ```
 
----
+
 
 ### 3. Interactive Editor Opens
 
