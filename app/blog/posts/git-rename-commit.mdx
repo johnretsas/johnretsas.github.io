@@ -1,8 +1,8 @@
 ---
-**title**: Renaming a Commit in a Pull Request Using Git (with Conventional Commits)
-**publishedAt**: "2024-11-05"
-**tags**: Git, Version Control, Pull Request, Dev Workflow, Conventional Commits
-**summary**: Learn how to rename a commit in a pull request using Git’s interactive rebase, following the Conventional Commits format. Includes a step-by-step animated terminal demo for clarity.
+title: Renaming a Commit in a Pull Request Using Git (with Conventional Commits)
+publishedAt: "2025-13-06"
+tags: Git, Version Control, Pull Request, Dev Workflow, Conventional Commits
+summary: Learn how to rename a commit in a pull request using Git’s interactive rebase, following the Conventional Commits format. Includes a step-by-step animated terminal demo for clarity.
 
 ---
 
@@ -10,7 +10,7 @@
 
 ### Renaming a Commit in a Pull Request (Conventional Commits Style)
 
-Clear and consistent **commit messages** make your Git history easier to understand, review, and automate. In many teams, developers follow the **Conventional Commits** convention, where commit messages follow a strict format like:
+Clear and consistent commit messages make your Git history easier to understand, review, and automate. In many teams, developers follow the Conventional Commits convention, where commit messages follow a strict format like:
 
 ```
 feat: add new user registration flow
@@ -18,16 +18,16 @@ fix: handle edge case in pricing logic
 docs: update API usage examples
 ```
 
-If you've already pushed a commit and realize it needs renaming—for clarity, convention, or feedback—you can **rename it using interactive rebase**.
+If you've already pushed a commit and realize it needs renaming—for clarity, convention, or feedback—you can rename it using interactive rebase.
 
 
 
 ## Key Concepts
 
-* **Why Rename a Commit?**
+* Why Rename a Commit?
   To clarify the commit’s purpose, correct formatting, or align with a commit style guide (e.g., Conventional Commits).
 
-* **What Are Conventional Commits?**
+* What Are Conventional Commits?
   A standardized format for commit messages that makes history easier to parse for humans and tools alike. Example:
 
   ```
@@ -42,7 +42,7 @@ If you've already pushed a commit and realize it needs renaming—for clarity, c
 
 ## Step-by-Step: How to Rename a Commit
 
-We’ll walk through renaming a commit using `git rebase -i`, with an **animated terminal demo** below.
+We’ll walk through renaming a commit using `git rebase -i`, with an animated terminal demo below.
 
 ### 1. Check Your Recent Commits
 
@@ -56,7 +56,7 @@ d4e5f6g feat(ui): add spacing utility classes
 a1b2c3d fix(layout): correct mobile nav overflow
 ```
 
-Suppose we want to **rename** `feat(ui): add spacing utility classes`.
+Suppose we want to rename `feat(ui): add spacing utility classes`.
 
 
 
@@ -96,7 +96,7 @@ You'll be prompted to enter a new message:
 feat(ui): add utility classes for margin and padding
 ```
 
-Make the message **specific and Conventional Commit-compliant**. Save and exit.
+Make the message specific and Conventional Commit-compliant. Save and exit.
 
 
 ### 5. Force Push the Updated History
@@ -110,7 +110,7 @@ git push origin your-branch-name --force
 
 ## 🎞️ Animated Terminal Demo
 
-Here’s a **text-based animation** of the full flow:
+Here’s a text-based animation of the full flow:
 
 ```bash
 # Show commit history
@@ -143,6 +143,6 @@ $ git push origin your-branch-name --force
 
 ## Conclusion
 
-Renaming a commit using `git rebase -i` is a clean and controlled way to maintain a meaningful Git history—especially when paired with the **Conventional Commits** format. This not only improves collaboration and reviewability but also supports automated tools like changelog generators and CI pipelines.
+Renaming a commit using `git rebase -i` is a clean and controlled way to maintain a meaningful Git history—especially when paired with the Conventional Commits format. This not only improves collaboration and reviewability but also supports automated tools like changelog generators and CI pipelines.
 
 Well-written commits = professional, maintainable projects.
