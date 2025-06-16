@@ -1,4 +1,5 @@
 import "./global.css";
+import Script from "next/script";
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
@@ -60,6 +61,11 @@ export default function RootLayout({
           <Analytics />
           <SpeedInsights />
         </main>
+        <Script
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "1296c9df827a48928fb433b3e82d7c9d"}'
+        ></Script>
       </body>
     </html>
   );
