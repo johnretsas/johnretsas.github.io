@@ -21,13 +21,18 @@ export default function Page() {
             Bachelor's and MSc in Computer Science
           </strong>{" "}
           and currently work at{" "}
-          <a href="https://goodfit.io" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1">
+          <a
+            href="https://goodfit.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1"
+          >
             <strong className={styles.warmText}>Goodfit.io</strong>
             <FiExternalLink className="inline text-[var(--accent)]" size={16} />
           </a>
           , where I build with{" "}
           <strong className={styles.warmText}>
-            Next.js, TypeScript, and React
+            AWS, TypeScript, and React
           </strong>
           .
         </p>
