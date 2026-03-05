@@ -12,15 +12,15 @@ import { baseUrl } from "./sitemap";
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "Portfolio",
-    template: "%s | Portfolio",
+    default: "John Retsas",
+    template: "%s | John Retsas",
   },
-  description: "This is my portfolio.",
+  description: "Senior Full Stack Engineer. Building for the web.",
   openGraph: {
-    title: "My Portfolio",
-    description: "This is my portfolio.",
+    title: "John Retsas",
+    description: "Senior Full Stack Engineer. Building for the web.",
     url: baseUrl,
-    siteName: "My Portfolio",
+    siteName: "John Retsas",
     locale: "en_US",
     type: "website",
   },
@@ -48,7 +48,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={cx(
-        "text-black bg-white dark:text-white dark:bg-black",
+        "text-black bg-white dark:text-white dark:bg-[#0a0a0a]",
         GeistSans.variable,
         GeistMono.variable
       )}

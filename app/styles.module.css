@@ -1,4 +1,23 @@
 .warmText {
     color: #f6ad55;
-    font-weight: bold;
+    font-weight: 600;
+}
+
+.accentLine {
+    width: 48px;
+    height: 3px;
+    background: linear-gradient(90deg, #f6ad55, #e8963a);
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+}
+
+.introSection {
+    line-height: 1.75;
+    color: #404040;
+}
+
+@media (prefers-color-scheme: dark) {
+    .introSection {
+        color: #d4d4d4;
+    }
 }
