@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 ::selection {
-  background-color: #47a3f3;
-  color: #fefefe;
+  background-color: #f6ad55;
+  color: #0a0a0a;
 }
 
 :root {
@@ -10,11 +10,15 @@
   --sh-identifier: #354150;
   --sh-sign: #8996a3;
   --sh-string: #007f7a;
-  --sh-keyword: #e02518;
+  --sh-keyword: #e25a1c;
   --sh-comment: #a19595;
   --sh-jsxliterals: #6266d1;
   --sh-property: #e25a1c;
   --sh-entity: #e25a1c;
+  --accent: #f6ad55;
+  --accent-dim: #e8963a;
+  --accent-subtle: rgba(246, 173, 85, 0.1);
+  --accent-border: rgba(246, 173, 85, 0.2);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -52,6 +56,11 @@ html {
   @apply underline transition-all decoration-neutral-400 dark:decoration-neutral-600 underline-offset-2 decoration-[0.1em];
 }
 
+.prose a:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
 .prose .anchor:after {
   @apply text-neutral-300 dark:text-neutral-700;
   content: "#";
@@ -62,17 +71,34 @@ html {
 }
 
 .prose pre {
-  @apply bg-neutral-50 dark:bg-neutral-900 rounded-lg overflow-x-auto border border-neutral-200 dark:border-neutral-900 py-2 px-3 text-sm;
+  @apply rounded-xl overflow-x-auto py-4 px-5 text-sm;
+  background-color: #fafafa;
+  border: 1px solid #e5e5e5;
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose pre {
+    background-color: #111111;
+    border-color: #262626;
+  }
 }
 
 .prose code {
-  @apply px-1 py-0.5 rounded-lg;
+  @apply px-1.5 py-0.5 rounded-md text-sm;
+  background-color: #f5f5f5;
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose code {
+    background-color: #1a1a1a;
+  }
 }
 
 .prose pre code {
   @apply p-0;
   border: initial;
-  line-height: 1.5;
+  line-height: 1.7;
+  background-color: transparent;
 }
 
 .prose code span {
@@ -80,24 +106,23 @@ html {
 }
 
 .prose img {
-  /* Don't apply styles to next/image */
-  @apply m-0;
+  @apply m-0 rounded-xl;
 }
 
 .prose p {
-  @apply my-4 text-neutral-800 dark:text-neutral-200;
+  @apply my-4 text-neutral-700 dark:text-neutral-300 leading-relaxed;
 }
 
 .prose h1 {
-  @apply text-4xl font-medium tracking-tight mt-6 mb-2;
+  @apply text-4xl font-semibold tracking-tight mt-8 mb-3;
 }
 
 .prose h2 {
-  @apply text-xl font-medium tracking-tight mt-6 mb-2;
+  @apply text-2xl font-semibold tracking-tight mt-10 mb-3;
 }
 
 .prose h3 {
-  @apply text-xl font-medium tracking-tight mt-6 mb-2;
+  @apply text-xl font-semibold tracking-tight mt-8 mb-2;
 }
 
 .prose h4 {
@@ -105,21 +130,29 @@ html {
 }
 
 .prose strong {
-  @apply font-medium;
+  @apply font-semibold;
 }
 
 .prose ul {
-  @apply list-disc pl-6;
+  @apply list-disc pl-6 space-y-1;
 }
 
 .prose ol {
-  @apply list-decimal pl-6;
+  @apply list-decimal pl-6 space-y-1;
+}
+
+.prose li {
+  @apply text-neutral-700 dark:text-neutral-300;
 }
 
 .prose > :first-child {
-  /* Override removing top margin, causing layout shift */
   margin-top: 1.25em !important;
   margin-bottom: 1.25em !important;
+}
+
+.prose blockquote {
+  @apply pl-4 italic text-neutral-600 dark:text-neutral-400;
+  border-left: 3px solid var(--accent);
 }
 
 pre::-webkit-scrollbar {
@@ -128,9 +161,7 @@ pre::-webkit-scrollbar {
 
 pre {
   -ms-overflow-style: none;
-  /* IE and Edge */
   scrollbar-width: none;
-  /* Firefox */
 }
 
 /* Remove Safari input shadow on mobile */
@@ -154,33 +185,30 @@ table {
 
 a {
   text-decoration: underline 0.15em rgba(0, 0, 0, 0);
-  text-underline-offset: 1px;
-  transition: text-decoration-color 300ms;
+  text-underline-offset: 2px;
+  transition: color 200ms ease, text-decoration-color 200ms ease;
 }
 
 @media (min-width: 768px) {
   a:hover {
-    color: #f6ad55;
-    transition: all 0.1s;
+    color: var(--accent);
     text-decoration: underline;
     text-decoration-thickness: 0.15em;
     text-underline-offset: 4px;
-    text-decoration-color: #f6ad55;
-    transition: text-decoration-color 300ms;
+    text-decoration-color: var(--accent);
 
     p {
-      color: #f6ad55;
-      transition: all 0.1s;
+      color: var(--accent);
     }
   }
 }
 
 @media screen and (max-width: 768px) {
   a:active {
-    color: #f6ad55;
+    color: var(--accent);
 
     p {
-      color: #f6ad55;
+      color: var(--accent);
     }
   }
 }

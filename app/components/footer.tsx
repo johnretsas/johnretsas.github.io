@@ -1,4 +1,5 @@
 import { FaDev, FaGitAlt } from "react-icons/fa";
+
 function ArrowIcon() {
   return (
     <svg
@@ -18,47 +19,47 @@ function ArrowIcon() {
 
 export default function Footer() {
   return (
-    <footer className="mb-16">
-      <ul className="font-sm mt-8 flex flex-col space-x-0 space-y-2 text-neutral-600 md:flex-row md:space-x-4 md:space-y-0 dark:text-neutral-300">
+    <footer className="mb-16 mt-16 pt-8 border-t border-neutral-200 dark:border-neutral-800">
+      <ul className="text-base flex flex-col space-y-2 md:flex-row md:space-x-6 md:space-y-0 text-neutral-500 dark:text-neutral-400">
         <li>
           <a
-            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            className="flex items-center gap-2 transition-all hover:text-[var(--accent)]"
             rel="noopener noreferrer"
             target="_blank"
             href="https://github.com/johnretsas"
           >
             <ArrowIcon />
-            <p className="ml-2 h-7">github</p>
-            <FaGitAlt size={25} className="ml-2"/>
+            <span>github</span>
+            <FaGitAlt size={16} />
           </a>
         </li>
         <li>
           <a
-            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            className="flex items-center gap-2 transition-all hover:text-[var(--accent)]"
             rel="noopener noreferrer"
             target="_blank"
             href="https://github.com/johnretsas/johnretsas.github.io"
           >
             <ArrowIcon />
-            <p className="ml-2 h-7">view source</p>
-            <FaGitAlt size={25} className="ml-2"/>
+            <span>source</span>
+            <FaGitAlt size={16} />
           </a>
         </li>
         <li>
           <a
-            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            className="flex items-center gap-2 transition-all hover:text-[var(--accent)]"
             rel="noopener noreferrer"
             target="_blank"
             href="https://dev.to/johnretsas"
           >
             <ArrowIcon />
-            <p className="ml-2 h-7">dev.to</p>
-            <FaDev size={25} className="ml-2"/>
+            <span>dev.to</span>
+            <FaDev size={16} />
           </a>
         </li>
       </ul>
-      <p className="mt-8 text-neutral-600 dark:text-neutral-300">
-        © {new Date().getFullYear()} MIT Licensed
+      <p className="mt-6 text-sm text-neutral-400 dark:text-neutral-600">
+        &copy; {new Date().getFullYear()} MIT Licensed
       </p>
     </footer>
   );
