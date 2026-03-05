@@ -45,7 +45,7 @@ export default function Page() {
           <strong className={styles.warmText}>AWS Lambda, S3, and SQS</strong>.
         </p>
         <p className="text-neutral-500 dark:text-neutral-400 text-base">
-          When I'm not coding I really enjoy reading, playing music, hiking, or
+          When I'm not coding I really enjoy reading, playing music, hiking, and
           traveling.
         </p>
       </div>
