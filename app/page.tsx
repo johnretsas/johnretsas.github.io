@@ -4,7 +4,7 @@ import styles from "./styles.module.css";
 
 export default function Page() {
   return (
-    <section>
+    <section className="animate-fade-in">
       <div className={styles.accentLine} />
       <h1 className="text-4xl font-semibold tracking-tight mb-8">
         Hey, I'm <span className={styles.warmText}>John</span>.
