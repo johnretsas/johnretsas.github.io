@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-family-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-family-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
 /* Fade-in animation */
 @keyframes fade-in {
   from {
@@ -14,6 +21,12 @@
 
 .animate-fade-in {
   animation: fade-in 0.4s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in {
+    animation: none;
+  }
 }
 
 ::selection {
@@ -35,6 +48,8 @@
   --accent-dim: #e8963a;
   --accent-subtle: rgba(246, 173, 85, 0.1);
   --accent-border: rgba(246, 173, 85, 0.2);
+  /* Darker shade for orange text on light backgrounds (WCAG AA) */
+  --accent-text: #c2410c;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -43,6 +58,7 @@
     --sh-identifier: white;
     --sh-keyword: #f47067;
     --sh-string: #0fa295;
+    --accent-text: var(--accent);
   }
 
   html {
@@ -52,6 +68,12 @@
 
 html {
   min-width: 360px;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+code,
+pre {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 .prose .anchor {
@@ -73,7 +95,7 @@ html {
 }
 
 .prose a:hover {
-  color: var(--accent);
+  color: var(--accent-text);
   text-decoration-color: var(--accent);
 }
 
@@ -207,24 +229,24 @@ a {
 
 @media (min-width: 768px) {
   a:hover {
-    color: var(--accent);
+    color: var(--accent-text);
     text-decoration: underline;
     text-decoration-thickness: 0.15em;
     text-underline-offset: 4px;
     text-decoration-color: var(--accent);
 
     p {
-      color: var(--accent);
+      color: var(--accent-text);
     }
   }
 }
 
 @media screen and (max-width: 768px) {
   a:active {
-    color: var(--accent);
+    color: var(--accent-text);
 
     p {
-      color: var(--accent);
+      color: var(--accent-text);
     }
   }
 }

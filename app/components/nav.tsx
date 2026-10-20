@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { FiHome, FiBookOpen } from "react-icons/fi";
 
 const navItems = {
@@ -12,30 +15,35 @@ const navItems = {
   },
 };
 
+function isActive(pathname: string, path: string) {
+  return path === "/" ? pathname === "/" : pathname.startsWith(path);
+}
+
 export function Navbar() {
+  const pathname = usePathname();
+
   return (
     <aside className="-ml-[8px] mb-16 tracking-tight">
-      <div className="lg:sticky lg:top-20">
-        <nav
-          className="flex flex-row items-center relative px-0 pb-0 fade md:overflow-auto scroll-pr-6 md:relative"
-          id="nav"
-        >
-          <div className="flex flex-row items-center gap-1">
-            {Object.entries(navItems).map(([path, { name, icon }]) => {
-              return (
-                <Link
-                  key={path}
-                  href={path}
-                  className="transition-all hover:text-[var(--accent)] flex items-center gap-1.5 relative py-1.5 px-3 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-900 text-base font-medium"
-                >
-                  {icon}
-                  {name}
-                </Link>
-              );
-            })}
-          </div>
-        </nav>
-      </div>
+      <nav className="flex flex-row items-center gap-1" id="nav">
+        {Object.entries(navItems).map(([path, { name, icon }]) => {
+          const active = isActive(pathname, path);
+          return (
+            <Link
+              key={path}
+              href={path}
+              aria-current={active ? "page" : undefined}
+              className={`transition-all hover:text-[var(--accent-text)] flex items-center gap-1.5 relative py-1.5 px-3 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-900 text-base font-medium ${
+                active
+                  ? "text-[var(--accent-text)] after:absolute after:left-3 after:right-3 after:-bottom-0.5 after:h-[2px] after:rounded-full after:bg-[var(--accent)]"
+                  : "text-neutral-600 dark:text-neutral-400"
+              }`}
+            >
+              {icon}
+              {name}
+            </Link>
+          );
+        })}
+      </nav>
     </aside>
   );
 }
